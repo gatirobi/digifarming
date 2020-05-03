@@ -68,7 +68,7 @@ class Staff(models.Model):
     id = HashidAutoField(primary_key=True)
     staff_user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='staff_user')
     staff_id = models.CharField(null=False, max_length=100)
-    staff_job_tUsersitle = models.ForeignKey(JobTitle, on_delete=models.CASCADE)
+    staff_job_title = models.ForeignKey(JobTitle, on_delete=models.CASCADE)
     staff_job_shift = models.ForeignKey(JobShift, on_delete=models.CASCADE)
     is_hr = models.BooleanField(null=False, default=False)
     staff_created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='staff_created_by')
@@ -96,7 +96,7 @@ class Facility(models.Model):
     facility_type = models.ForeignKey(FacilityType, on_delete=models.CASCADE)
     facility_name = models.CharField(max_length=50, null=False)
     facility_location = models.CharField(max_length=50, null=False)
-    facility_capacity = models.IntegerField(max_length=50, null=False)
+    facility_capacity = models.IntegerField(null=False)
     status = models.IntegerField(null=False, default=1)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     created_on = models.DateTimeField(default=timezone.now)
@@ -277,23 +277,12 @@ class CustomerTranportation(models.Model):
     customer_created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     customer_created_on = models.DateTimeField(null=False, default=timezone.now)
 
-
-class Menu(models.Model):
-    meal_name = models.CharField(max_length=100, null=False)
-    meal_cost = models.IntegerField(null=False)
-    meal_image = models.ImageField(upload_to='media/meal/', null=True, blank=True)
-    meal_created_by = models.ForeignKey(User, on_delete=models.CASCADE)
-    meal_created_on = models.DateTimeField(default=timezone.now)
-    meal_status = models.IntegerField(null=False, default=1)
-
-    def __str__(self):
-        return self.meal_name
-
 class Order(models.Model):
     order_created_by = models.ForeignKey(User, on_delete=models.CASCADE)
-    order_created_on = models.DateTimeField(default=timezone.now)
-    order_order_status = models.IntegerField(null=False, default=0)
+    order_client = models.ForeignKey(Client, on_delete=models.CASCADE)
+    order_status = models.IntegerField(null=False, default=0)
     order_paid = models.BooleanField(null=False, default=False)
+    order_created_on = models.DateTimeField(default=timezone.now)
 
 
 class OrderItem(models.Model):
@@ -320,3 +309,8 @@ class DepartureView(models.Model):
     class Meta:
         managed = False
         db_table = 'DeparturesView'
+
+class CancellationView(models.Model):
+    class Meta:
+        managed = False
+        db_table = 'CancellationView'
