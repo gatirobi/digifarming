@@ -205,7 +205,7 @@ class TransportCategory(models.Model):
 
 
 class TransportType(models.Model):
-    transport_category = models.ForeignKey(CommodityCategory, on_delete=models.CASCADE)
+    transport_category = models.ForeignKey(TransportCategory, on_delete=models.CASCADE)
     transport_type_name = models.CharField(max_length=100, null=False)
     transport_type_created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     transport_type_created_on = models.DateTimeField(null=False, default=timezone.now)
@@ -267,7 +267,7 @@ class HarvestDispatch(models.Model):
     dispatch_created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='dispatcher')
     dispatch_created_on = models.DateTimeField(default=timezone.now)
 
-class CustomerTranportation(models.Model):
+class CustomerTransportation(models.Model):
     customer_commodity = models.ForeignKey(Commodity, on_delete=models.CASCADE)
     customer_transport_item = models.ForeignKey(TransportItems, on_delete=models.CASCADE)
     customer_quantity = models.IntegerField(null=False)
@@ -280,8 +280,8 @@ class CustomerTranportation(models.Model):
 class Order(models.Model):
     order_created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     order_client = models.ForeignKey(Client, on_delete=models.CASCADE)
-    order_status = models.IntegerField(null=False, default=0)
-    order_paid = models.BooleanField(null=False, default=False)
+    order_status = models.IntegerField(null=False, default=1)
+    order_paid = models.BooleanField(null=False, default=True)
     order_created_on = models.DateTimeField(default=timezone.now)
 
 
@@ -290,6 +290,8 @@ class OrderItem(models.Model):
     order_item = models.ForeignKey(Commodity, on_delete=models.CASCADE)
     order_type = models.ForeignKey(CommodityType, on_delete=models.CASCADE)
     order_item_quantity = models.IntegerField(null=False, default=1)
+    order_item_cost = models.IntegerField(null=False)
+
 
 
 class UserTrackingMovements(models.Model):

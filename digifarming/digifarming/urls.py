@@ -28,10 +28,18 @@ urlpatterns = [
     path('login/', views.user_login, name='user_login'),
     path('logout/', views.user_logout, name='user_logout'),
 
+    # Facility
+    path('facility/add/', views.add_facility_ajax, name='add_facility_ajax'),
+    path('facility/type/', views.add_facility_type_ajax, name='add_facility_type_ajax'),
+
+    # Client
+    path('client/add/', views.add_client_ajax, name='add_client_ajax'),
+    path('client/type/', views.add_client_type_ajax, name='add_client_type_ajax'),
+
     # Job titles
     path('job/titles/add/', views.add_job_title, name='add_job_title'),
     path('job/titles/all/', views.all_job_title, name='all_job_titles'),
-    path('job/titles/view/<str:job_title_id>', views.job_title_details, name='job_title_details'),
+    # path('job/titles/view/<str:job_title_id>', views.job_title_details, name='job_title_details'),
     path('job/titles/update/<str:job_title_id>', views.update_job_title, name='update_job_title'),
     path('job/titles/remove/<str:job_title_id>', views.deactivate_job_title, name='deactivate_job_title'),
 

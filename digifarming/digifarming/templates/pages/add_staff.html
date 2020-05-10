@@ -1,0 +1,67 @@
+{% extends 'pages/login_base.html' %}
+{% load widget_tweaks %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4">
+                <div class="login-panel panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Register Staff</h3>
+                    </div>
+                    <div class="panel-body">
+                         {% if messages %}
+                            <div class="alert alert-success alert-dismissible">
+                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                {% for message in messages %}
+                                    {{ message }}
+                                {% endfor %}
+                            </div>
+                         {% endif %}
+                        <form method="POST" class="post-form">
+                            {% csrf_token %}
+                            <fieldset>
+                                <div class="form-group">
+                                    {%  render_field user_form.first_name class="form-control" placeholder="First Name"%}
+                                </div>
+                                <div class="form-group">
+                                    {%  render_field user_form.last_name class="form-control" placeholder="Last Name"%}
+                                </div>
+                               <div class="form-group">
+                                   {%  render_field user_form.email class="form-control" placeholder="Email Address"%}
+                               </div>
+                                <div class="form-group">
+                                   {%  render_field user_form.phone class="form-control" placeholder="Phone Number"%}
+                               </div>
+                                <div class="form-group">
+                                   {%  render_field user_form.password1 class="form-control" placeholder="Password"%}
+                                </div>
+                                 <div class="form-group">
+                                   {%  render_field user_form.password2 class="form-control" placeholder="Confirm Password"%}
+                               </div>
+                               <div class="form-group">
+                                {%  render_field staff_form.staff_id class="form-control" placeholder="Staff ID"%}
+                               </div>
+                               <div class="form-group">
+                                {%  render_field staff_form.staff_job_title class="form-control" placeholder="Job Title"%}
+                               </div>
+                               <div class="form-group">
+                                {%  render_field staff_form.staff_job_shift class="form-control" placeholder="Job Shift"%}
+                               </div>
+                               <div class="form-group">
+                                {%  render_field staff_form.is_hr class="form-control" placeholder="Is the staff an HR?"%}
+                               </div>
+                               <!-- <div class="checkbox">
+                                <label>
+                                    <input name="remember" type="checkbox" value=" Remember Me">Remember Me
+                                </label>
+                            </div> -->
+
+                                <button type="submit" class="btn btn-lg btn-success btn-block">Register</button>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

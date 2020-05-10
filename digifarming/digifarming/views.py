@@ -4,7 +4,9 @@ from digifarming.models import User, Staff, Rating, \
     RequestType, Commodity, Supply, \
     Order, OrderItem, UserTrackingMovements, HarvestDispatch,FacilityType, Facility, \
     JobTitle, JobShift, ArrivalView, DepartureView, CancellationView, \
-    TransportCategory, TransportType, TransportItems, Client, ClientType, CustomerTranportation
+    TransportCategory, TransportType, TransportItems, Client, ClientType, CustomerTransportation, \
+    CommodityCategory, CommodityType, CommodityMetric, Commodity, HarvestDispatch    
+
     # Hotel, ArrivalView, DepartureView, CancellationView, TodayBookingView, \
     # BookingSummaryView, InhouseGuestView, OverBookingView, RoomsOccupiedView, MostUsedFacilityView, \
     # LeastUsedFacilityView, AllOrdersListView, Laundry, LaundryType, LaundryItems, FacilityType, CleaningFacilityView, \
@@ -21,8 +23,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 from django.contrib import messages
 
-
-from .forms import JobTitleForm, JobShiftForm, StaffForm, UserUpdateForm, UserForm, LoginForm
+from .forms import JobTitleForm, JobShiftForm, StaffForm, UserUpdateForm, UserForm, LoginForm, \
+    FacilityForm, FacilityTypeForm, ClientTypeForm, ClientForm, CommodityCategoryForm, CommodityTypeForm, \
+    CommodityMetricForm, CommodityForm, TransportCategoryForm, TransportTypeForm, TransportItemsForm, \
+    CustomerTransportationForm, HarvestDispatchForm, OrderItemForm, OrderForm, SupplyForm
 
 
 
@@ -181,24 +185,23 @@ def tracking_check_in_ajax(request, **kwargs):
 # TODO
 # Creating a new order
 def add_order_ajax(request, **kwargs):
-    if request.method == 'POST':
-        if request.is_ajax():
-            request_params = request.POST.dict()
-            print(request_params)
+    if request.method == "POST":
+        form = OrderForm(request.POST)
+        if form.is_valid():
+            order = form.save(commit=False)
+            order_created_by = request.user
+            order.save()
+            messages.success(request, 'Order was added successfully')
+            return redirect('add_order_ajax')
 
-            try:
-                order = Order()
-                order.order_status = request_params.get('order_status')
-                order.order_client = request_params.get('order_client')
-                order.paid = request_params.get('paid')
-                order.created_by = request_params.get('created_by')
-                order.save()
-                return http.HttpResponse(
-                    json.dumps({'id': order.id, 'order_status': order.order_status}),
-                    status=201)
+    else:
+        form = OrderForm()
 
-            except DatabaseError as e:
-                return http.HttpResponse(status=400, content="A problem occurred. booking not created")
+    context = {
+        'form': form
+    }
+
+    return render(request, 'pages/add_order.html', context)
 
 
 # List all orders
@@ -215,7 +218,7 @@ def add_order_ajax(request, **kwargs):
 def update_order_ajax(request, **kwargs):
     if request.method == 'POST' and request.is_ajax():
         try:
-            order = _update_ajax(Orders, request)
+            order = _update_ajax(Order, request)
             return http.HttpResponse(
                 json.dumps({'pk': order.id, 'status': order.order_status, }),
                 status=201)
@@ -223,155 +226,90 @@ def update_order_ajax(request, **kwargs):
             return http.HttpResponse(status=400, content='An error occurred while processing your request')
     return http.HttpResponse(status=400)
 
-
-# Creating  new commodity
-def add_commodity_ajax(request, **kwargs):
-    if request.method == 'POST':
-        if request.is_ajax():
-            request_params = request.POST.dict()
-            print(request_params)
-
-            try:
-                commodity = Commodity()
-                commodity.commodity_id = request_params.get('commodity_id')
-                commodity.commodity_type = request_params.get('commodity_type')
-                commodity.name = request_params.get('commodity_name')
-                commodity.quantity = request_params.get('quantity')
-                commodity.metric = request_params.get('metric')
-                commodity.created_on = request_params.get('created_on')
-                commodity.save()
-                return http.HttpResponse(
-                    json.dumps({'id': commodity.commodity_id, 'commodity_id': commodity.commodity_id}),
-                    status=201)
-
-            except DatabaseError as e:
-                return http.HttpResponse(status=400, content="A problem occurred. commodity not created")
-
-
-# List all commodities
-class AllCommodityListView(generic.ListView):
-    template_name = ''
-    context_object_name = 'all_commodity_list'
-    model = Commodity
-
-    def get_queryset(self):
-        return AllCommodityListView.objects.all()
-
-
-# updating commodity
-def update_commodity_ajax(request, **kwargs):
+# deleting a order
+def delete_order_ajax(request, **kwargs):
     if request.method == 'POST' and request.is_ajax():
         try:
-            commodity = _update_ajax(Commodity, request)
+            order = Order.objects.get(pk=request.POST.get('pk'))
+            order_id = order.id
+            order.delete()
             return http.HttpResponse(
-                json.dumps({'pk': commodity.id, 'commodity_name': commodity.name, }),
+                content='order <strong>{}</strong> has been successfully deleted'.format(order_id), status=200)
+        except DatabaseError as e:
+            return http.HttpResponse(status=400, content='An error occurred while processing your request')
+
+# Creating  a new order item
+def add_order_item_ajax(request, **kwargs):
+    if request.method == "POST":
+        form = OrderItemForm(request.POST)
+        if form.is_valid():
+            order = form.save(commit=False)
+            order.save()
+            messages.success(request, 'Order Item was added successfully')
+            return redirect('add_order_ajax')
+
+    else:
+        form = OrderItemForm()
+
+    context = {
+        'form': form
+    }
+
+    return render(request, 'pages/add_order.html', context)
+
+# List all order items
+class AllOrderItemListView(generic.ListView):
+    template_name = ''
+    context_object_name = 'all_order_list'
+    model = OrderItem
+
+    def get_queryset(self):
+        return AllOrderItemListView.objects.all()
+
+
+# updating order item
+def update_order_item_ajax(request, **kwargs):
+    if request.method == 'POST' and request.is_ajax():
+        try:
+            order = _update_ajax(OrderItem, request)
+            return http.HttpResponse(
+                json.dumps({'pk': order.id, 'order_name': order.order_full_name, }),
                 status=201)
         except DatabaseError as e:
             return http.HttpResponse(status=400, content='An error occurred while processing your request')
     return http.HttpResponse(status=400)
 
 
-# deleting commodity
-def delete_commodity_ajax(request, **kwargs):
+# deleting a order item
+def delete_order_item_ajax(request, **kwargs):
     if request.method == 'POST' and request.is_ajax():
         try:
-            commodity = Commodity.objects.get(pk=request.POST.get('pk'))
-            commodity_id = commodity.id
-            commodity.delete()
+            order = OrderItem.objects.get(pk=request.POST.get('pk'))
+            order_id = order.id
+            order.delete()
             return http.HttpResponse(
-                content='commodity <strong>{}</strong> has been successfully deleted'.format(commodity_id), status=200)
+                content='order <strong>{}</strong> has been successfully deleted'.format(order_id), status=200)
         except DatabaseError as e:
             return http.HttpResponse(status=400, content='An error occurred while processing your request')
 
-
-# Creating  new harvest
-def add_harvest_ajax(request, **kwargs):
-    if request.method == 'POST':
-        if request.is_ajax():
-            request_params = request.POST.dict()
-            print(request_params)
-
-            try:
-                harvest = HarvestDispatch()
-                harvest.dispatch_commodity = request_params.get('dispatch_commodity')
-                harvest.dispatch_created_by = request_params.get('user_id')
-                harvest.dispatch_facility = request_params.get('dispatch_facility')
-                harvest.dispatch_metric = request_params.get('dispatch_metric')
-                harvest.dispatch_quantity = request_params.get('dispatch_quantity')
-                harvest.dispatch_to_staff = request_params.get('dispatch_to_staff')
-                harvest.save()
-                return http.HttpResponse(
-                    json.dumps({'id': harvest.id, 'dispatch_commodity': harvest.dispatch_commodity}),
-                    status=201)
-
-            except DatabaseError as e:
-                return http.HttpResponse(status=400, content="A problem occurred. harvest not created")
-
-
-# List all harvest
-class AllHarvestListView(generic.ListView):
-    template_name = ''
-    context_object_name = 'all_harvest_list'
-    model = HarvestDispatch
-
-    def get_queryset(self):
-        return AllHarvestListView.objects.all()
-
-
-# updating harvest
-def update_harvest_ajax(request, **kwargs):
-    if request.method == 'POST' and request.is_ajax():
-        try:
-            harvest = _update_ajax(HarvestDispatch, request)
-            return http.HttpResponse(
-                json.dumps({'pk': harvest.id, 'commodity_name': harvest.dispatch_commodity, }),
-                status=201)
-        except DatabaseError as e:
-            return http.HttpResponse(status=400, content='An error occurred while processing your request')
-    return http.HttpResponse(status=400)
-
-
-# deleting harvest
-def delete_commodity_ajax(request, **kwargs):
-    if request.method == 'POST' and request.is_ajax():
-        try:
-            harvest = HarvestDispatch.objects.get(pk=request.POST.get('pk'))
-            harvest_id = harvest.id
-            harvest.delete()
-            return http.HttpResponse(
-                content='harvest <strong>{}</strong> has been successfully deleted'.format(harvest_id), status=200)
-        except DatabaseError as e:
-            return http.HttpResponse(status=400, content='An error occurred while processing your request')
-
-
-# TODO DONE 
-# Creating  a new supply
+# Creating  a new supply item
 def add_supply_ajax(request, **kwargs):
-    if request.method == 'POST':
-        if request.is_ajax():
-            request_params = request.POST.dict()
-            print(request_params)
+    if request.method == "POST":
+        form = SupplyForm(request.POST)
+        if form.is_valid():
+            supply = form.save(commit=False)
+            supply.save()
+            messages.success(request, 'Supply was added successfully')
+            return redirect('add_supply_ajax')
 
-            try:
-                supply = Supply()
-                supply.supply_quantity = request_params.get('supply_quantity')
-                supply.supply_commodity = request_params.get('supply_commodity')
-                supply.supply_metric = request_params.get('supply_metric')
-                supply.supply_cost = request_params.get('supply_cost')
-                supply.supply_client = request_params.get('supply_client')
-                supply.supply_destination = request_params.get('supply_destination')
-                supply.supply_latitude = request_params.get('supply_latitude')
-                supply.supply_longitude = request_params.get('supply_longitude')
-                supply.supply_created_by = request_params.get('supply_created_by')
-                supply.created_on = request_params.get('created_on')
-                supply.save()
-                return http.HttpResponse(
-                    json.dumps({'id': supply.id, 'supply_client': supply.supply_client}),
-                    status=201)
+    else:
+        form = SupplyForm()
 
-            except DatabaseError as e:
-                return http.HttpResponse(status=400, content="A problem occurred. commodity not created")
+    context = {
+        'form': form
+    }
 
+    return render(request, 'pages/add_supply.html', context)
 
 # List all supplies
 class AllsupplyListView(generic.ListView):
@@ -470,26 +408,638 @@ def add_worker_ajax(request, **kwargs):
 #         except DatabaseError as e:
 #             return http.HttpResponse(status=400, content='An error occurred while processing your request')
 
+# Creating  a new harvest dispatch
+def add_harvest_dispatch_ajax(request, **kwargs):
+    if request.method == "POST":
+        form = HarvestDispatchForm(request.POST)
+        if form.is_valid():
+            harvest_dispatch = form.save(commit=False)
+            harvest_dispatch.dispatch_to_staff = request.user
+            harvest_dispatch.dispatch_created_by = request.user
+            harvest_dispatch.save()
+            messages.success(request, 'Transport dispatch was added successfully')
+            return redirect('add_harvest_dispatch_ajax')
 
-# Creating  a new facility
+    else:
+        form = HarvestDispatchForm()
+
+    context = {
+        'form': form
+    }
+
+    return render(request, 'pages/add_harvest_dispatch.html', context)
+
+# List all harvest dispatch
+class AllHarvestDispatchListView(generic.ListView):
+    template_name = ''
+    context_object_name = 'all_harvest_dispatch_list'
+    model = HarvestDispatch
+
+    def get_queryset(self):
+        return AllHarvestDispatchListView.objects.all()
+
+
+# updating harvest dispatch
+def update_harvest_dispatch_ajax(request, **kwargs):
+    if request.method == 'POST' and request.is_ajax():
+        try:
+            harvest_dispatch = _update_ajax(HarvestDispatch, request)
+            return http.HttpResponse(
+                json.dumps({'pk': harvest_dispatch.id, 'dispatch_commodity': harvest_dispatch.dispatch_commodity, }),
+                status=201)
+        except DatabaseError as e:
+            return http.HttpResponse(status=400, content='An error occurred while processing your request')
+    return http.HttpResponse(status=400)
+
+
+# deleting a harvest dispatch
+def delete_harvest_dispatch_ajax(request, **kwargs):
+    if request.method == 'POST' and request.is_ajax():
+        try:
+            harvest_dispatch = HarvestDispatch.objects.get(pk=request.POST.get('pk'))
+            harvest_dispatch_id = harvest_dispatch.id
+            harvest_dispatch.delete()
+            return http.HttpResponse(
+                content='harvest_dispatch <strong>{}</strong> has been successfully deleted'.format(harvest_dispatch_id), status=200)
+        except DatabaseError as e:
+            return http.HttpResponse(status=400, content='An error occurred while processing your request')
+
+# Creating  a new customer transportation
+def add_customer_transportation_ajax(request, **kwargs):
+    if request.method == "POST":
+        form = CustomerTransportationForm(request.POST)
+        if form.is_valid():
+            customer_transportation = form.save(commit=False)
+            customer_transportation.customer_created_by = request.user
+            customer_transportation.save()
+            messages.success(request, 'Transport transportation was added successfully')
+            return redirect('add_customer_transportation_ajax')
+
+    else:
+        form = CustomerTransportationForm()
+
+    context = {
+        'form': form
+    }
+
+    return render(request, 'pages/add_customer_transportation.html', context)
+
+# List all customer transportation
+class AllCustomerTransportationListView(generic.ListView):
+    template_name = ''
+    context_object_name = 'all_customer_transportation_list'
+    model = CustomerTransportation
+
+    def get_queryset(self):
+        return AllCustomerTransportationListView.objects.all()
+
+
+# updating customer transportation
+def update_customer_transportation_ajax(request, **kwargs):
+    if request.method == 'POST' and request.is_ajax():
+        try:
+            customer_transportation = _update_ajax(CustomerTransportation, request)
+            return http.HttpResponse(
+                json.dumps({'pk': customer_transportation.id, 'customer_transportation_name': customer_transportation.customer_transportation_full_name, }),
+                status=201)
+        except DatabaseError as e:
+            return http.HttpResponse(status=400, content='An error occurred while processing your request')
+    return http.HttpResponse(status=400)
+
+
+# deleting a customer transportation
+def delete_customer_transportation_ajax(request, **kwargs):
+    if request.method == 'POST' and request.is_ajax():
+        try:
+            customer_transportation = CustomerTransportation.objects.get(pk=request.POST.get('pk'))
+            customer_transportation_id = customer_transportation.id
+            customer_transportation.delete()
+            return http.HttpResponse(
+                content='customer_transportation <strong>{}</strong> has been successfully deleted'.format(customer_transportation_id), status=200)
+        except DatabaseError as e:
+            return http.HttpResponse(status=400, content='An error occurred while processing your request')
+
+# Creating  a new transport items
+def add_transport_items_ajax(request, **kwargs):
+    if request.method == "POST":
+        form = TransportItemsForm(request.POST)
+        if form.is_valid():
+            transport_items = form.save(commit=False)
+            transport_items.created_by = request.user
+            transport_items.save()
+            messages.success(request, 'Transport items was added successfully')
+            return redirect('add_transport_items_ajax')
+
+    else:
+        form = TransportItemsForm()
+
+    context = {
+        'form': form
+    }
+
+    return render(request, 'pages/add_transport_items.html', context)
+
+# List all transport items
+class AllTransportItemsListView(generic.ListView):
+    template_name = ''
+    context_object_name = 'all_transport_items_list'
+    model = TransportItems
+
+    def get_queryset(self):
+        return AllTransportItemsListView.objects.all()
+
+
+# updating transport items
+def update_transport_items_ajax(request, **kwargs):
+    if request.method == 'POST' and request.is_ajax():
+        try:
+            transport_items = _update_ajax(TransportItems, request)
+            return http.HttpResponse(
+                json.dumps({'pk': transport_items.id, 'transport_items_name': transport_items.transport_items_full_name, }),
+                status=201)
+        except DatabaseError as e:
+            return http.HttpResponse(status=400, content='An error occurred while processing your request')
+    return http.HttpResponse(status=400)
+
+
+# deleting a transport items
+def delete_transport_items_ajax(request, **kwargs):
+    if request.method == 'POST' and request.is_ajax():
+        try:
+            transport_items = TransportItems.objects.get(pk=request.POST.get('pk'))
+            transport_items_id = transport_items.transport_items_id
+            transport_items.delete()
+            return http.HttpResponse(
+                content='transport_items <strong>{}</strong> has been successfully deleted'.format(transport_items_id), status=200)
+        except DatabaseError as e:
+            return http.HttpResponse(status=400, content='An error occurred while processing your request')
+
+# Creating  a new transport type
+def add_transport_type_ajax(request, **kwargs):
+    if request.method == "POST":
+        form = TransportTypeForm(request.POST)
+        if form.is_valid():
+            transport_type = form.save(commit=False)
+            transport_type.created_by = request.user
+            transport_type.save()
+            messages.success(request, 'Transport type was added successfully')
+            return redirect('add_transport_type_ajax')
+
+    else:
+        form = TransportTypeForm()
+
+    context = {
+        'form': form
+    }
+
+    return render(request, 'pages/add_transport_type.html', context)
+
+# List all transport type
+class AllTransportTypeListView(generic.ListView):
+    template_name = ''
+    context_object_name = 'all_transport_type_list'
+    model = TransportType
+
+    def get_queryset(self):
+        return AllTransportTypeListView.objects.all()
+
+
+# updating transport type
+def update_transport_type_ajax(request, **kwargs):
+    if request.method == 'POST' and request.is_ajax():
+        try:
+            transport_type = _update_ajax(TransportType, request)
+            return http.HttpResponse(
+                json.dumps({'pk': transport_type.id, 'transport_type_name': transport_type.transport_type_full_name, }),
+                status=201)
+        except DatabaseError as e:
+            return http.HttpResponse(status=400, content='An error occurred while processing your request')
+    return http.HttpResponse(status=400)
+
+
+# deleting a transport type
+def delete_transport_type_ajax(request, **kwargs):
+    if request.method == 'POST' and request.is_ajax():
+        try:
+            transport_type = TransportType.objects.get(pk=request.POST.get('pk'))
+            transport_type_id = transport_type.transport_type_id
+            transport_type.delete()
+            return http.HttpResponse(
+                content='transport_type <strong>{}</strong> has been successfully deleted'.format(transport_type_id), status=200)
+        except DatabaseError as e:
+            return http.HttpResponse(status=400, content='An error occurred while processing your request')
+
+# Creating  a new transport category
+def add_transport_category_ajax(request, **kwargs):
+    if request.method == "POST":
+        form = TransportCategoryForm(request.POST)
+        if form.is_valid():
+            transport_category = form.save(commit=False)
+            transport_category.created_by = request.user
+            transport_category.save()
+            messages.success(request, 'Transport category was added successfully')
+            return redirect('add_transport_category_ajax')
+
+    else:
+        form = TransportCategoryForm()
+
+    context = {
+        'form': form
+    }
+
+    return render(request, 'pages/add_transport_category.html', context)
+
+# List all transport category
+class AllTransportCategoryListView(generic.ListView):
+    template_name = ''
+    context_object_name = 'all_transport_category_list'
+    model = TransportCategory
+
+    def get_queryset(self):
+        return AllTransportCategoryListView.objects.all()
+
+
+# updating transport category
+def update_transport_category_ajax(request, **kwargs):
+    if request.method == 'POST' and request.is_ajax():
+        try:
+            transport_category = _update_ajax(TransportCategory, request)
+            return http.HttpResponse(
+                json.dumps({'pk': transport_category.id, 'transport_category_name': transport_category.transport_category_full_name, }),
+                status=201)
+        except DatabaseError as e:
+            return http.HttpResponse(status=400, content='An error occurred while processing your request')
+    return http.HttpResponse(status=400)
+
+
+# deleting a transport category
+def delete_transport_category_ajax(request, **kwargs):
+    if request.method == 'POST' and request.is_ajax():
+        try:
+            transport_category = TransportCategory.objects.get(pk=request.POST.get('pk'))
+            transport_category_id = transport_category.transport_category_id
+            transport_category.delete()
+            return http.HttpResponse(
+                content='transport_category <strong>{}</strong> has been successfully deleted'.format(transport_category_id), status=200)
+        except DatabaseError as e:
+            return http.HttpResponse(status=400, content='An error occurred while processing your request')
+
+
+# Creating  a new commodity
+def add_commodity_ajax(request, **kwargs):
+    if request.method == "POST":
+        form = CommodityForm(request.POST)
+        if form.is_valid():
+            commodity = form.save(commit=False)
+            commodity.commodity_created_by = request.user
+            commodity.save()
+            messages.success(request, 'Commodity was added successfully')
+            return redirect('add_commodity_ajax')
+
+    else:
+        form = CommodityForm()
+
+    context = {
+        'form': form
+    }
+
+    return render(request, 'pages/add_commodity.html', context)
+
+# List all commodity
+class AllCommodityListView(generic.ListView):
+    template_name = ''
+    context_object_name = 'all_commodity_list'
+    model = Commodity
+
+    def get_queryset(self):
+        return AllCommodityListView.objects.all()
+
+
+# updating commodity
+def update_commodity_ajax(request, **kwargs):
+    if request.method == 'POST' and request.is_ajax():
+        try:
+            commodity = _update_ajax(Commodity, request)
+            return http.HttpResponse(
+                json.dumps({'pk': commodity.id, 'commodity_name': commodity.commodity_full_name, }),
+                status=201)
+        except DatabaseError as e:
+            return http.HttpResponse(status=400, content='An error occurred while processing your request')
+    return http.HttpResponse(status=400)
+
+
+# deleting a commodity
+def delete_commodity_ajax(request, **kwargs):
+    if request.method == 'POST' and request.is_ajax():
+        try:
+            commodity = Commodity.objects.get(pk=request.POST.get('pk'))
+            commodity_id = commodity.commodity_id
+            commodity.delete()
+            return http.HttpResponse(
+                content='commodity <strong>{}</strong> has been successfully deleted'.format(commodity_id), status=200)
+        except DatabaseError as e:
+            return http.HttpResponse(status=400, content='An error occurred while processing your request')
+
+# Creating  a new commodity metric
+def add_commodity_metric_ajax(request, **kwargs):
+    if request.method == "POST":
+        form = CommodityMetricForm(request.POST)
+        if form.is_valid():
+            commodity_metric = form.save(commit=False)
+            commodity_metric.commodity_metric_created_by = request.user
+            commodity_metric.save()
+            messages.success(request, 'Commodity metric was added successfully')
+            return redirect('add_commodity_metric_ajax')
+
+    else:
+        form = CommodityMetricForm()
+
+    context = {
+        'form': form
+    }
+
+    return render(request, 'pages/add_commodity_metric.html', context)
+
+# List all commodity metric
+class AllCommodityMetricListView(generic.ListView):
+    template_name = ''
+    context_object_name = 'all_commodity_metric_list'
+    model = CommodityMetric
+
+    def get_queryset(self):
+        return AllCommodityMetricListView.objects.all()
+
+
+# updating commodity metric
+def update_commodity_metric_ajax(request, **kwargs):
+    if request.method == 'POST' and request.is_ajax():
+        try:
+            commodity_metric = _update_ajax(CommodityMetric, request)
+            return http.HttpResponse(
+                json.dumps({'pk': commodity_metric.id, 'commodity_metric_name': commodity_metric.commodity_metric_full_name, }),
+                status=201)
+        except DatabaseError as e:
+            return http.HttpResponse(status=400, content='An error occurred while processing your request')
+    return http.HttpResponse(status=400)
+
+
+# deleting a commodity metric
+def delete_commodity_metric_ajax(request, **kwargs):
+    if request.method == 'POST' and request.is_ajax():
+        try:
+            commodity_metric = CommodityMetric.objects.get(pk=request.POST.get('pk'))
+            commodity_metric_id = commodity_metric.commodity_metric_id
+            commodity_metric.delete()
+            return http.HttpResponse(
+                content='commodity_metric <strong>{}</strong> has been successfully deleted'.format(commodity_metric_id), status=200)
+        except DatabaseError as e:
+            return http.HttpResponse(status=400, content='An error occurred while processing your request')
+
+
+# Creating  a new commodity type
+def add_commodity_type_ajax(request, **kwargs):
+    if request.method == "POST":
+        form = CommodityTypeForm(request.POST)
+        if form.is_valid():
+            commodity_type = form.save(commit=False)
+            commodity_type.commodity_type_created_by = request.user
+            commodity_type.save()
+            messages.success(request, 'Commodity type was added successfully')
+            return redirect('add_commodity_type_ajax')
+
+    else:
+        form = CommodityTypeForm()
+
+    context = {
+        'form': form
+    }
+
+    return render(request, 'pages/add_commodity_type.html', context)
+
+# List all commodity type
+class AllCommodityTypeListView(generic.ListView):
+    template_name = ''
+    context_object_name = 'all_commodity_type_list'
+    model = CommodityType
+
+    def get_queryset(self):
+        return AllCommodityTypeListView.objects.all()
+
+
+# updating commodity type
+def update_commodity_type_ajax(request, **kwargs):
+    if request.method == 'POST' and request.is_ajax():
+        try:
+            commodity_type = _update_ajax(CommodityType, request)
+            return http.HttpResponse(
+                json.dumps({'pk': commodity_type.id, 'commodity_type_name': commodity_type.commodity_type_full_name, }),
+                status=201)
+        except DatabaseError as e:
+            return http.HttpResponse(status=400, content='An error occurred while processing your request')
+    return http.HttpResponse(status=400)
+
+
+# deleting a commodity type
+def delete_commodity_type_ajax(request, **kwargs):
+    if request.method == 'POST' and request.is_ajax():
+        try:
+            commodity_type = CommodityType.objects.get(pk=request.POST.get('pk'))
+            commodity_type_id = commodity_type.commodity_type_id
+            commodity_type.delete()
+            return http.HttpResponse(
+                content='commodity_type <strong>{}</strong> has been successfully deleted'.format(commodity_type_id), status=200)
+        except DatabaseError as e:
+            return http.HttpResponse(status=400, content='An error occurred while processing your request')
+
+# Creating  a new commodity category
+def add_commodity_category_ajax(request, **kwargs):
+    if request.method == "POST":
+        form = CommodityCategoryForm(request.POST)
+        if form.is_valid():
+            commodity_category = form.save(commit=False)
+            commodity_category.commodity_category_created_by = request.user
+            commodity_category.save()
+            messages.success(request, 'CommodityCategory was added successfully')
+            return redirect('add_commodity_category_ajax')
+
+    else:
+        form = CommodityCategoryForm()
+
+    context = {
+        'form': form
+    }
+
+    return render(request, 'pages/add_commodity_category.html', context)
+
+# List all commodity category
+class AllCommodityCategoryListView(generic.ListView):
+    template_name = ''
+    context_object_name = 'all_commodity_category_list'
+    model = CommodityCategory
+
+    def get_queryset(self):
+        return AllCommodityCategoryListView.objects.all()
+
+
+# updating commodity category
+def update_commodity_category_ajax(request, **kwargs):
+    if request.method == 'POST' and request.is_ajax():
+        try:
+            commodity_category = _update_ajax(CommodityCategory, request)
+            return http.HttpResponse(
+                json.dumps({'pk': commodity_category.id, 'commodity_category_name': commodity_category.commodity_category_full_name, }),
+                status=201)
+        except DatabaseError as e:
+            return http.HttpResponse(status=400, content='An error occurred while processing your request')
+    return http.HttpResponse(status=400)
+
+
+# deleting a commodity category
+def delete_commodity_category_ajax(request, **kwargs):
+    if request.method == 'POST' and request.is_ajax():
+        try:
+            commodity_category = CommodityCategory.objects.get(pk=request.POST.get('pk'))
+            commodity_category_id = commodity_category.commodity_category_id
+            commodity_category.delete()
+            return http.HttpResponse(
+                content='commodity_category <strong>{}</strong> has been successfully deleted'.format(commodity_category_id), status=200)
+        except DatabaseError as e:
+            return http.HttpResponse(status=400, content='An error occurred while processing your request')
+
+
+# Creating  a new client
+def add_client_ajax(request, **kwargs):
+    if request.method == "POST":
+        form = ClientForm(request.POST)
+        if form.is_valid():
+            client = form.save(commit=False)
+            client.created_by = request.user
+            client.save()
+            messages.success(request, 'Client was added successfully')
+            return redirect('add_client_ajax')
+
+    else:
+        form = ClientForm()
+
+    context = {
+        'form': form
+    }
+
+    return render(request, 'pages/add_client.html', context)
+
+# List all Client
+class AllClientListView(generic.ListView):
+    template_name = ''
+    context_object_name = 'all_client_list'
+    model = Client
+
+    def get_queryset(self):
+        return AllClientListView.objects.all()
+
+
+# updating client
+def update_client_ajax(request, **kwargs):
+    if request.method == 'POST' and request.is_ajax():
+        try:
+            client = _update_ajax(Client, request)
+            return http.HttpResponse(
+                json.dumps({'pk': client.id, 'client_name': client.client_full_name, }),
+                status=201)
+        except DatabaseError as e:
+            return http.HttpResponse(status=400, content='An error occurred while processing your request')
+    return http.HttpResponse(status=400)
+
+
+# deleting a client
+def delete_client_ajax(request, **kwargs):
+    if request.method == 'POST' and request.is_ajax():
+        try:
+            client = Client.objects.get(pk=request.POST.get('pk'))
+            client_id = client.client_id
+            client.delete()
+            return http.HttpResponse(
+                content='client <strong>{}</strong> has been successfully deleted'.format(client_id), status=200)
+        except DatabaseError as e:
+            return http.HttpResponse(status=400, content='An error occurred while processing your request')
+
+
+# Creating  a new client type
+def add_client_type_ajax(request, **kwargs):
+    if request.method == "POST":
+        form = ClientTypeForm(request.POST)
+        if form.is_valid():
+            client_type = form.save(commit=False)
+            client_type.created_by = request.user
+            client_type.save()
+            messages.success(request, 'client type was added successfully')
+            return redirect('add_client_type_ajax')
+
+    else:
+        form = ClientTypeForm()
+
+    context = {
+        'form': form
+    }
+
+    return render(request, 'pages/add_client_type.html', context)
+
+
+# List all client types
+class AllClientTypeListView(generic.ListView):
+    template_name = ''
+    context_object_name = 'all_client_type_list'
+    model = ClientType
+
+    def get_queryset(self):
+        return AllClientTypeListView.objects.all()
+
+
+# updating client type
+def update_client_type_ajax(request, **kwargs):
+    if request.method == 'POST' and request.is_ajax():
+        try:
+            client_type = _update_ajax(ClientType, request)
+            return http.HttpResponse(
+                json.dumps({'pk': client_type.id, 'client_type': client_type.client_type, }),
+                status=201)
+        except DatabaseError as e:
+            return http.HttpResponse(status=400, content='An error occurred while processing your request')
+    return http.HttpResponse(status=400)
+
+
+# deleting client type
+def delete_client_type_ajax(request, **kwargs):
+    if request.method == 'POST' and request.is_ajax():
+        try:
+            client = ClientType.objects.get(pk=request.POST.get('pk'))
+            client_type_id = client.client_type_id
+            client.delete()
+            return http.HttpResponse(
+                content='client type <strong>{}</strong> has been successfully deleted'.format(client_type_id), status=200)
+        except DatabaseError as e:
+            return http.HttpResponse(status=400, content='An error occurred while processing your request')
+
+
+
+# Creating  a new facility type
 def add_facility_type_ajax(request, **kwargs):
-    if request.method == 'POST':
-        if request.is_ajax():
-            request_params = request.POST.dict()
-            print(request_params)
+    if request.method == "POST":
+        form = FacilityTypeForm(request.POST)
+        if form.is_valid():
+            facility_type = form.save(commit=False)
+            facility_type.created_by = request.user
+            facility_type.save()
+            messages.success(request, 'Facility type was added successfully')
+            return redirect('add_facility_type_ajax')
 
-            try:
-                facility = FacilityType()
+    else:
+        form = FacilityTypeForm()
 
-                facility.facility_type = request_params.get('facility_type')
-                facility.created_on = request_params.get('created_on')
-                facility.save()
-                return http.HttpResponse(
-                    json.dumps({'id': facility.id, 'facility_type': facility.facility_type}),
-                    status=201)
+    context = {
+        'form': form
+    }
 
-            except DatabaseError as e:
-                return http.HttpResponse(status=400, content="A problem occurred. commodity not created")
+    return render(request, 'pages/add_facility_type.html', context)
 
 
 # List all Facility types
@@ -530,28 +1080,23 @@ def delete_facility_type_ajax(request, **kwargs):
 
 # Creating  a new facility
 def add_facility_ajax(request, **kwargs):
-    if request.method == 'POST':
-        if request.is_ajax():
-            request_params = request.POST.dict()
-            print(request_params)
+    if request.method == "POST":
+        form = FacilityForm(request.POST)
+        if form.is_valid():
+            facility = form.save(commit=False)
+            facility.created_by = request.user
+            facility.save()
+            messages.success(request, 'Facility was added successfully')
+            return redirect('add_facility_ajax')
 
-            try:
-                facility = Facility
+    else:
+        form = FacilityForm()
 
-                facility.facility_number = request_params.get('facility_number')
-                facility.facility_name = request_params.get('facility_name')
-                facility.facility_type = request_params.get('facility_type')
-                facility.facility_location = request_params.get('facility_location')
-                facility.facility_capacity = request_params.get('facility_capacity')
-                facility.created_on = request_params.get('created_on')
-                facility.save()
-                return http.HttpResponse(
-                    json.dumps({'id': facility.id, 'facility_name': facility.facility_name}),
-                    status=201)
+    context = {
+        'form': form
+    }
 
-            except DatabaseError as e:
-                return http.HttpResponse(status=400, content="A problem occurred. commodity not created")
-
+    return render(request, 'pages/add_facility.html', context)
 
 # List all Facility
 class AllFacilityListView(generic.ListView):
@@ -588,7 +1133,7 @@ def delete_facility_ajax(request, **kwargs):
         except DatabaseError as e:
             return http.HttpResponse(status=400, content='An error occurred while processing your request')
 
-
+# TODO
 # Creating  a new rating
 def add_rating_ajax(request, **kwargs):
     if request.method == 'POST':
@@ -597,12 +1142,11 @@ def add_rating_ajax(request, **kwargs):
             print(request_params)
 
             try:
-                rate = Ratings
+                rate = Rating
 
                 rate.user_id = request_params.get('user_id')
                 rate.rating = request_params.get('rating')
                 rate.comment = request_params.get('comment')
-                rate.created_on = request_params.get('created_on')
 
                 rate.save()
                 return http.HttpResponse(
@@ -655,7 +1199,6 @@ def user_register(request):
        form = UserForm(request.POST)
        if form.is_valid():
            user = form.save(commit=False)
-           user.created_on = timezone.now()
            user.save()
            messages.success(request, 'Registered successfully')
            return redirect('user_login')
@@ -693,7 +1236,7 @@ def user_logout(request):
     return redirect('user_login')
 
 
-@login_required
+# @login_required
 def add_job_title(request):
     if request.method == "POST":
         form = JobTitleForm(request.POST)
@@ -724,17 +1267,16 @@ def all_job_title(request):
     return render(request, 'pages/all_job_titles.html', context)
 
 
-@login_required
-def job_title_details(request, job_title_id):
-    job_title = get_object_or_404(JobTitle, id=job_title_id)
-    staff = Staff.objects.filter(staff_job_title=job_title, staff_user__status=1)
+# def job_title_details(request, job_title_id):
+#     job_title = get_object_or_404(JobTitle, id=job_title_id)
+#     staff = Staff.objects.filter(staff_job_title=job_title, staff_user__status=1)
 
-    context = {
-        'job_title': job_title,
-        'staff': staff
-    }
+#     context = {
+#         'job_title': job_title,
+#         'staff': staff
+#     }
 
-    return render(request, 'pages/job_title_details.html', context)
+#     return render(request, 'pages/job_title_details.html', context)
 
 
 @login_required
@@ -833,7 +1375,7 @@ def deactivate_job_shift(request, job_shift_id):
     return redirect('all_job_shifts')
 
 
-@login_required
+# @login_required
 def add_staff(request):
     if request.method == "POST":
         user_form = UserForm(request.POST)
