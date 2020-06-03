@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CKAN - Datasets Collection</title>
+
+    <style>
+        a {
+            color: #f26522;
+            text-decoration: none;
+        }
+
+        a:hover, a:focus {
+            text-decoration: none;
+            color: #272727;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .top-padder15 {
+            padding-top: 15px;
+        }
+
+        .top-padder20 {
+            padding-top: 20px;
+        }
+
+        .top-padder25 {
+            padding-top: 25px;
+        }
+
+        .email_container {
+            width: 100%;
+            background: #f5f5f5;
+            color: #6c757d;;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.5;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            padding-top: 15px;
+            padding-bottom: 20px;
+        }
+
+        .email-wrapper {
+            background: #ffffff;
+            box-shadow: 5px 5px 25px 0px rgba(46, 61, 73, 0.2);
+            width: 92%;
+            margin: 25px 4%;
+            border: 1px solid #e8e8e8;
+        }
+
+        .email_logo {
+            padding: 15px;
+            border-bottom: 1px solid #e8e8e8;
+            background: rgba(0, 0, 0, 0.01);
+            text-align: center;
+        }
+
+        .email_body, .email_footer {
+            padding: 20px;
+        }
+
+        .email_title {
+            font-size: 15px;
+            color: #2e2e2e;
+            width: 100%;
+        }
+
+        .email_body a.email_btn {
+            background: #f26522;
+            padding: 9px 12px;
+            border: 1px solid #f26522;
+            color: #ffffff;
+            border-radius: 3px;
+        }
+
+        .email_body a.email_btn:hover, .email_body a.email_btn:focus {
+            background: #ffffff;
+            color: #f26522;
+            text-decoration: none;
+        }
+
+        .email_signature {
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .email_footer {
+            -moz-osx-font-smoothing: grayscale;
+            border-top: 1px solid #eeeeee;
+            background: rgba(0, 0, 0, 0.01);
+            height: 25px;
+            font-size: 13px;
+        }
+    </style>
+</head>
+{% autoescape off %}
+    <body>
+    <div class="email_container">
+        <div class="email-wrapper">
+            <div class="email_logo text-center">
+                <img src="http://data.iita.org/base/images/iitalogo.png" width="100">
+            </div>
+            <div class="email_body">
+                <div class="email_title">
+                    Dear {{ name }},
+                </div>
+                <div class="email_content">
+                    <p>
+                        Your account has been successfully approved. You now have access to the administrator's dashboard.
+                        Click the button below to proceed to login.
+                    </p>
+                    <div class=" top-padder15">
+                        <a href="http://{{ domain }}{% url 'admin-login' %}" class="email_btn">
+                            Proceed to Login
+                        </a>
+                    </div>
+                </div>
+                <div class="email_signature top-padder25">
+                    Regards,<br>
+                    Data management unit
+                </div>
+            </div>
+            <div class="email_footer text-center">
+                <strong>Terms of Use:</strong> A product of IITA data management unit
+            </div>
+        </div>
+    </div>
+    </body>
+{% endautoescape %}
+</html>

@@ -1,0 +1,43 @@
+{% extends 'base/authentication_base.html' %}
+{% load widget_tweaks %}
+
+{% block authentication_base %}
+    <div class="auth_content">
+        <form method="post" action="{% url 'admin-login' %}">
+            {% csrf_token %}
+            {% include 'common/includes/messages.html' %}
+            <div class="auth_errors">
+                {% for error in form.non_field_errors %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ error|escape }}
+                    </div>
+                {% endfor %}
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ error|escape }}
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+            <div class="form-group">
+                <label for="r_email">Email Address *</label>
+                {% render_field form.email class="form-control" id="r_email" %}
+            </div>
+            <div class="form-group">
+                <label for="r_password">Password *</label>
+                {% render_field form.password class="form-control" id="r_password" %}
+            </div>
+
+            {% if request.GET.next %}
+                <input type="hidden" name="next" value="{{ request.GET.next }}">
+            {% endif %}
+
+            <button type="submit" class="btn btn-primary btn-submit">Login</button>
+        </form>
+        <p class="text-center auth_redirect">
+            Don't have an account? <a href="{% url 'admin-register' %}">Create Account</a>
+        </p>
+    </div>
+
+{% endblock %}

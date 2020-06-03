@@ -1,0 +1,18 @@
+{% extends 'common/base/errors_base.html' %}
+{% load static %}
+{% block error_content %}
+    <div class="error-image text-center">
+        <img src="{% static 'admin/images/404_error.png' %}">
+    </div>
+    <h4>Sorry, Page Not Found</h4>
+    <p>The page you requested couldn't be found</p>
+
+    <div class="action_buttons">
+        <a href="" class="btn btn-primary btn-sm">
+            <i class="fa fa-arrow-left"></i> Previous Page
+        </a>
+        <a href="{% url 'public-add-submission' %}" class="btn btn-primary btn-sm">
+            <i class="fa fa-home"></i> Back Home
+        </a>
+    </div>
+{% endblock %}

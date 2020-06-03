@@ -1,0 +1,17 @@
+{% extends 'common/base/errors_base.html' %}
+{% load static %}
+{% block error_content %}
+    <div class="error-image text-center">
+        <img src="{% static 'admin/images/500_error.png' %}">
+    </div>
+    <h4>OOPs..Something Went Wrong</h4>
+    <p>
+        An internal server error has occured, We're working to fix it and we'll be back online in a while. <br>
+        Need to contact us? Use the button below
+    </p>
+    <div class="action_buttons">
+        <a href="mailto: o.obileye@cgiar.org" class="btn btn-primary btn-sm">
+            <i class="fa fa-envelope"></i> Contact Us
+        </a>
+    </div>
+{% endblock %}

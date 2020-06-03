@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CKAN - Datasets Collection</title>
+
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'admin/assets/bootstrap/css/bootstrap.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'admin/assets/pe7s-icons/pe-icon-7-stroke/css/pe-icon-7-stroke.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'admin/assets/pe7s-icons/pe-icon-7-stroke/css/helper.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'admin/css/common.css' %}"/>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-3">
+            <div class="wrapper">
+                <div class="message-logo text-center">
+                    <img src="{% static 'admin/images/logo.png' %}">
+                </div>
+                <div class="message-body">
+                    {% block common_content %}
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

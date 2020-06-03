@@ -14,8 +14,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(max_length=50, null=False)
     email = models.EmailField(null=False, unique=True)
     phone = models.CharField(max_length=50, null=False)
-    id_number = models.CharField(max_length=50, null=False)
-    gender = models.CharField(choices=gender_choices, max_length=100, null=False)
     created_on = models.DateTimeField(null=False, default=timezone.now)
     is_staff = models.BooleanField(null=False,default=False)
     is_client = models.BooleanField(null=False, default=False)
@@ -280,6 +278,7 @@ class CustomerTransportation(models.Model):
 class Order(models.Model):
     order_created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     order_client = models.ForeignKey(Client, on_delete=models.CASCADE)
+    order_name = models.CharField(max_length=100, null=False)
     order_status = models.IntegerField(null=False, default=1)
     order_paid = models.BooleanField(null=False, default=True)
     order_created_on = models.DateTimeField(default=timezone.now)

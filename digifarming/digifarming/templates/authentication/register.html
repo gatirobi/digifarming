@@ -1,0 +1,64 @@
+{% extends 'base/authentication_base.html' %}
+{% load widget_tweaks %}
+
+{% block authentication_base %}
+    <div class="auth_content">
+        <form method="post" action="{% url 'user_register' %}" id="user_register">
+            {% csrf_token %}
+            {% include 'common/includes/messages.html' %}
+            <div class="auth_errors" id="admin_auth_errors">
+
+            </div>
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="form-group">
+                        <label>First Name *</label>
+                        {% render_field form.first_name class="form-control" %}
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="form-group">
+                        <label>Last Name *</label>
+                        {% render_field form.last_name class="form-control" %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Email Address *</label>
+                {% render_field form.phone class="form-control"%}
+            </div>
+
+            <div class="form-group">
+                <label>Email Address *</label>
+                {% render_field form.email class="form-control"%}
+            </div>
+            <div class="form-group">
+                <label>Password *</label>
+                {% render_field form.password1 class="form-control" %}
+                <small class="form-text text-muted">
+                    <ul>
+                        <li>Password must contain atleast 8 characters.</li>
+                        <li>Password can't be a commonly used password.</li>
+                        <li>Password can't be entirely numeric.</li>
+                    </ul>
+                </small>
+            </div>
+            <div class="form-group">
+                <label>Confirm Password *</label>
+                {% render_field form.password2 class="form-control" %}
+                <small class="form-text text-muted">
+                    Passwords must match.
+                </small>
+            </div>
+
+            <!-- <div class="g-recaptcha" data-sitekey="6Ld7M9cUAAAAACfKKSVmnianHggA7F4q8Cp5i_Cz"></div> -->
+
+            <button type="submit" class="btn btn-primary btn-submit save_btn">Create User Account</button>
+        </form>
+        <p class="text-center auth_redirect">
+            Already have an account? <a href="{% url 'user_login' %}">Login Here</a>
+        </p>
+    </div>
+
+{% endblock %}

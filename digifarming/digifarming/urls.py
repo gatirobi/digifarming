@@ -36,6 +36,28 @@ urlpatterns = [
     path('client/add/', views.add_client_ajax, name='add_client_ajax'),
     path('client/type/', views.add_client_type_ajax, name='add_client_type_ajax'),
 
+    # Commodity
+    path('commodity/add/', views.add_commodity_ajax, name='add_commodity_ajax'),
+    path('commodity/category/', views.add_commodity_category_ajax, name='add_commodity_category_ajax'),
+    path('commodity/metric/', views.add_commodity_metric_ajax, name='add_commodity_metric_ajax'),
+    path('commodity/type/', views.add_commodity_type_ajax, name='add_commodity_type_ajax'),
+  
+    # Transport 
+    path('transport/add/', views.add_transport_items_ajax, name='add_transport_items_ajax'),
+    path('transport/category/', views.add_transport_category_ajax, name='add_transport_category_ajax'),
+    path('transport/type/', views.add_transport_type_ajax, name='add_transport_type_ajax'),
+
+    # Order 
+    path('order/add/', views.add_order_ajax, name='add_order_ajax'),
+    path('order/item/', views.add_order_item_ajax, name='add_order_item_ajax'),
+
+    path('customer/transportation/', views.add_customer_transportation_ajax, name='add_customer_transportation_ajax'),
+    path('harvest/', views.add_harvest_dispatch_ajax, name='add_harvest_dispatch_ajax'),
+    path('supply/', views.add_supply_ajax, name='add_supply_ajax'),
+
+
+    
+  
     # Job titles
     path('job/titles/add/', views.add_job_title, name='add_job_title'),
     path('job/titles/all/', views.all_job_title, name='all_job_titles'),

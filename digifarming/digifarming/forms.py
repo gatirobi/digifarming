@@ -20,13 +20,13 @@ class JobShiftForm(forms.ModelForm):
 class UserForm(UserCreationForm):
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'email', 'phone', 'id_number', 'gender', 'password1', 'password2')
+        fields = ('first_name', 'last_name', 'email', 'phone', 'password1', 'password2')
 
 
 class UserUpdateForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'email', 'phone', 'id_number', 'gender')
+        fields = ('first_name', 'last_name', 'email', 'phone')
 
 
 class StaffForm(forms.ModelForm):
@@ -114,12 +114,12 @@ class HarvestDispatchForm(forms.ModelForm):
 class OrderItemForm(forms.ModelForm):
     class Meta:
         model = OrderItem
-        fields = ('order_item','order_type','order_item_quantity', 'order_item_cost')
+        fields = ('order','order_item','order_type','order_item_quantity', 'order_item_cost')
 
 class OrderForm(forms.ModelForm):
     class Meta:
         model = Order
-        fields = ('order_client','order_status','order_paid')
+        fields = ('order_client','order_name')
 
 class SupplyForm(forms.ModelForm):
     class Meta:

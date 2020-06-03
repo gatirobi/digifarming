@@ -1,0 +1,95 @@
+body {
+    background: #f5f5f5;
+    color: #6c757d;;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.5;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 400;
+    color: #2e2e2e;
+}
+
+.btn-primary {
+    background: #f26522;
+    border: 1px solid #f26522;
+}
+
+.btn-primary:hover, .btn-primary:focus {
+    background: #ffffff;
+    border: 1px solid #f26522;
+    color: #f26522;
+}
+
+.message-title span {
+    vertical-align: 5px;
+}
+
+.message-title i {
+    font-size: 26px;
+}
+
+.wrapper {
+    background: #ffffff;
+    box-shadow: 5px 5px 25px 0px rgba(46, 61, 73, 0.2);
+}
+
+.text-center {
+    text-align: center;
+}
+
+.message-logo {
+    border-bottom: 1px solid #e8e8e8;
+    padding: 15px 20px;
+    background: rgba(0, 0, 0, 0.01);
+}
+
+.message-body {
+    padding: 20px;
+}
+
+body.errors {
+    padding: 0;
+}
+
+body.errors .container {
+    height: calc(100vh);
+}
+
+body.errors .wrapper {
+   margin-top: calc(17vh);
+}
+
+.error-content {
+    padding: 65px 20px;
+}
+
+.error-content .error-image {
+    padding: 0 0 20px 0;
+}
+
+.error-content .error-image img {
+    width: 45%;
+}
+
+.error-content h4 {
+    color: #dc0000
+}
+
+.error-content .action_buttons {
+    padding-top: 11px;
+}
+
+.error-content .action_buttons a {
+    margin: 0 2px;
+}
+
+@media (max-width: 767px) {
+    .error-content .error-image img {
+        width: 100%;
+    }
+}

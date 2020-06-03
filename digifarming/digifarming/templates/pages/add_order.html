@@ -1,0 +1,55 @@
+{% extends 'base/main_base.html' %}
+{% load widget_tweaks %}
+{% block content %}
+    <div class="app-inner-layout app-inner-layout-page">
+        <div class="app-inner-layout__wrapper">
+            <div class="app-inner-layout__content pt-1">
+                <div class="tab-content">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="main-card mb-3 card">
+                                    <div class="card-header">
+                                        Order Form
+                                    </div>
+                                    <div class="card-body">
+                                        {% include 'common/includes/messages.html' %}
+                                        <form method="post" action="{% url 'add_order_item_ajax' %}"
+                                              id="admin_submission_form"
+                                              data-stations-url="{% url 'add_harvest_dispatch_ajax' %}"
+                                              enctype="multipart/form-data">
+                                            {% csrf_token %}
+                                            <div class="form_errors" id="admin_submission_errors">
+                                                <!-- Errors div -->
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-6 col-md-6 col-sm-4 col-xs-12">
+                                                    <div class="form-group">
+                                                        <label>Client *</label>
+                                                        {% render_field form.order_client class="form-control" %}
+                                                        <small class="form-text text-muted">
+                                                            Choose the client who wants to make this order
+                                                        </small>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                                    <div class="form-group">
+                                                        <label>Order name *</label>
+                                                        {% render_field form.order_name class="form-control" %}
+                                                        <small class="form-text text-muted">
+                                                            This is the order you wish to create
+                                                        </small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

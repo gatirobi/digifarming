@@ -189,7 +189,7 @@ def add_order_ajax(request, **kwargs):
         form = OrderForm(request.POST)
         if form.is_valid():
             order = form.save(commit=False)
-            order_created_by = request.user
+            order.order_created_by = request.user
             order.save()
             messages.success(request, 'Order was added successfully')
             return redirect('add_order_ajax')
@@ -246,7 +246,7 @@ def add_order_item_ajax(request, **kwargs):
             order = form.save(commit=False)
             order.save()
             messages.success(request, 'Order Item was added successfully')
-            return redirect('add_order_ajax')
+            return redirect('add_order_item_ajax')
 
     else:
         form = OrderItemForm()
@@ -255,7 +255,7 @@ def add_order_item_ajax(request, **kwargs):
         'form': form
     }
 
-    return render(request, 'pages/add_order.html', context)
+    return render(request, 'pages/add_order_item.html', context)
 
 # List all order items
 class AllOrderItemListView(generic.ListView):
@@ -969,10 +969,10 @@ def add_client_type_ajax(request, **kwargs):
         form = ClientTypeForm(request.POST)
         if form.is_valid():
             client_type = form.save(commit=False)
-            client_type.created_by = request.user
+            client_type.created_by_id = request.user.id
             client_type.save()
             messages.success(request, 'client type was added successfully')
-            return redirect('add_client_type_ajax')
+            return redirect('add_client_ajax')
 
     else:
         form = ClientTypeForm()
@@ -1079,6 +1079,7 @@ def delete_facility_type_ajax(request, **kwargs):
 
 
 # Creating  a new facility
+@login_required
 def add_facility_ajax(request, **kwargs):
     if request.method == "POST":
         form = FacilityForm(request.POST)
@@ -1202,6 +1203,8 @@ def user_register(request):
            user.save()
            messages.success(request, 'Registered successfully')
            return redirect('user_login')
+       else:
+           return render(request, 'pages/register.html', {'form': form}) 
    else:
        form = UserForm()
        return render(request, 'pages/register.html', {'form': form})
@@ -1218,7 +1221,7 @@ def user_login(request):
 
             if user is not None:
                 login(request, user)
-                return redirect('dashboard')
+                return redirect('add_facility_ajax')
             else:
                 try:
                     user = User.objects.get(email=email)
