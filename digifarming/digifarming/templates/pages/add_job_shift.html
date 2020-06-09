@@ -14,9 +14,9 @@
                                     </div>
                                     <div class="card-body">
                                         {% include 'common/includes/messages.html' %}
-                                        <form method="post" action="{% url 'add_supply_ajax' %}"
+                                        <form method="post" action="{% url 'add-job-shift' %}"
                                               id="admin_submission_form"
-                                              data-stations-url="{% url 'add_harvest_dispatch_ajax' %}"
+                                              data-stations-url="{% url 'add-harvest-dispatch-ajax' %}"
                                               enctype="multipart/form-data">
                                             {% csrf_token %}
                                             <div class="form_errors" id="admin_submission_errors">
@@ -35,11 +35,26 @@
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                                     <div class="form-group">
                                                         <label>Shift start time *</label>
-                                                        {% render_field form.shift_start_time class="form-control" %}
+                                                        <!-- <div class='input-group date' id='datetimepicker3'>
+                                                            <input type='text' class="form-control" />
+                                                            <span class="input-group-addon">
+                                                                <span class="glyphicon glyphicon-time"></span>
+                                                            </span>
+                                                        </div> -->
+                                                        <!-- id="datetimepicker3" -->
+                                                            {% render_field form.shift_start_time class="form-control"  %}
+
                                                         <small class="form-text text-muted">
                                                             Shift start time
                                                         </small>
                                                     </div>
+                                                    <script type="text/javascript">
+                                                        $(function () {
+                                                            $('#datetimepicker3').datetimepicker({
+                                                                format: 'LT'
+                                                            });
+                                                        });
+                                                    </script>
                                                 </div>
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                                     <div class="form-group">

@@ -1,0 +1,228 @@
+{% extends 'base/main_base.html' %}
+{% load widget_tweaks %}
+{% block content %}
+
+
+<!-- start -->
+    <div class="app-inner-layout app-inner-layout-page">
+        <div class="app-inner-layout__wrapper">
+            <div class="app-inner-layout__content pt-1">
+                <div class="tab-content">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="main-card mb-3 card">
+                                    <div class="card-header">
+                                        Visualizations
+                                    </div>
+                                    <div class="card-body">
+                                        <!-- {% include 'common/includes/messages.html' %} -->
+                                        <!-- content -->
+
+                                        <!-- <div class="row">
+                                            <div class="col-lg-3 col-md-6">
+                                                <div class="card-box widget-box-three">
+                                                    <div class="bg-icon pull-left">
+                                                        <i class="ti-shopping-cart text-purple"></i>
+                                                    </div>
+                                                    <div class="text-right">
+                                                        <p class="text-muted text-uppercase font-600 font-secondary">New Orders</p>
+                                                        <h2 id="new_orders_last_day" >0</h2>
+                                                        <strong><small id="new_orders_weekly_avg"></small></strong>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-3 col-md-6">
+                                                <div class="card-box widget-box-three">
+                                                    <div class="bg-icon pull-left">
+                                                        <i class="mdi mdi-calendar-check text-purple"></i>
+                                                    </div>
+                                                    <div class="text-right">
+                                                        <p class="text-muted text-uppercase font-600 font-secondary">Confirmed Orders</p>
+                                                        <h2 id="confirmed_orders_last_day" >0</h2>
+                                                        <strong><small id="confirmed_orders_weekly_avg"></small></strong>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-3 col-md-6">
+                                                <div class="card-box widget-box-three">
+                                                    <div class="bg-icon pull-left">
+                                                        <i class="mdi mdi-truck-delivery text-purple"></i>
+                                                    </div>
+                                                    <div class="text-right">
+                                                        <p class="text-muted text-uppercase font-600 font-secondary">Dispatched Orders</p>
+                                                        <h2 id="dispatched_orders_last_day" >0</h2>
+                                                        <strong><small id="dispatched_orders_weekly_avg"></small></strong>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-3 col-md-6">
+                                                <div class="card-box widget-box-three">
+                                                    <div class="bg-icon pull-left">
+                                                        <i class="fa fa-money text-purple"></i>
+                                                    </div>
+                                                    <div class="text-right">
+                                                        <p class="text-muted text-uppercase font-600 font-secondary">Weekly Revenue</p>
+                                                        <h2 id="estimated_revenue_last_month" >0</h2>
+                                                        <strong><small id="gross_margin_last_month"></small></strong>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-sm-6 col-xs-12">
+                                                <div class="card-box">
+                                                    <h4 class="header-title m-t-0">Dispatch Volume</h4>
+                                                    <p class="text-muted font-14">
+                                                        The total volume of stems dispatched over the last 7 days.
+                                                    </p>
+                                                    <div id="header_total_stems_dispatched" class="m-t-10 text-center"></div>
+                                                    <div id="chart_total_stems_dispatched" class="m-t-10" style="height: 250px;"></div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-sm-6 col-xs-12">
+                                                <div class="card-box">
+                                                    <h4 class="header-title m-t-0">Production vs Exports</h4>
+                                                    <p class="text-muted font-14">
+                                                        Comparison of total stems harvested and proportional exports.
+                                                    </p>
+                                                    <div id="header_prod_exports" class="m-t-10 text-center"></div>
+                                                    <div id="chart_prod_exports" class="m-t-10" style="height: 250px;"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-lg-4">
+                                                <div class="card-box">
+                                                    <h4 class="header-title m-t-0">Top Varieties</h4>
+                                                    <p class="text-muted font-14">Highest volumes over the last 7 days.</p>
+                                                    <div class="table-responsive">
+                                                        <table id="tbl_top_sellers" class="table table table-hover m-0 custom_header nowrap responsive">
+                                                            <thead>
+                                                                <tr class="active">
+                                                                    <th width="60%">Variety</th>
+                                                                    <th class="text-center">Volume</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody></tbody>
+                                                        </table>
+                                                    </div> 
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-4">
+                                                <div class="card-box">
+                                                    <select class="selectpicker pull-right form-control show-tick convert_currency" data-width="fit">
+                                                        <option value="eur">EUR</option>
+                                                        <option value="usd">USD</option>
+                                                        <option value="gbp">GBP</option>
+                                                        <option value="kes">KES</option>
+                                                    </select>
+                                                    <h4 class="m-t-0 header-title"><b>Top Lines</b></h4>
+                                                    <p class="text-muted font-14">Highest demand over the last 7 days.</p>
+                                                    <div class="table-responsive">
+                                                        <table id="tbl_top_lines" class="table table-hover m-0 custom_header nowrap responsive">
+                                                            <thead>
+                                                                <tr class="active">
+                                                                    <th width="70%">Line</th>
+                                                                    <th class="text-center">Revenue</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody></tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div> 
+
+                                            <div class="col-lg-4">
+                                                <div class="card-box">
+                                                    <select class="selectpicker pull-right form-control show-tick convert_currency" data-width="fit">
+                                                        <option value="eur">EUR</option>
+                                                        <option value="usd">USD</option>
+                                                        <option value="gbp">GBP</option>
+                                                        <option value="kes">KES</option>
+                                                    </select>
+                                                    <h4 class="header-title m-t-0">Top Accounts</h4>
+                                                    <p class="text-muted font-14">Highest revenue in the last 7 days.</p>
+
+                                                    <div class="table-responsive">
+                                                        <table id="tbl_top_accounts" class="table table-hover m-0 custom_header nowrap responsive">
+                                                            <thead>
+                                                                <tr class="active">
+                                                                    <th width="70%">Account</th>
+                                                                    <th class="text-center">Revenue</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody></tbody>
+                                                        </table>
+                                                    </div>
+                                                </div> 
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-sm-8 col-xs-12">
+                                                <div class="card-box">
+                                                    <h4 class="header-title m-t-0">Global Footprint</h4>
+                                                    <p class="text-muted font-14">Locations where product was shipped to over the last 7 days.</p>
+                                                    <div id="mapcontainer" class="m-t-20">
+                                                        <div class="map center-block" style="max-width: 80%">Loading chart..</div>
+                                                        <div class="plotLegend">
+                                                            <span>Loading legend..</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="card-box">
+                                                    <h4 class="m-t-0 m-b-20 header-title"><strong>Latest Notifications</strong></h4>
+                                                    <div id="notifications_container" class="inbox-widget nicescroll mx-box"></div>
+                                                </div>
+                                            </div>
+                                        </div> -->
+
+
+                                        <div class="card-box">
+                                            <h4 class="m-t-0 header-title"><strong>Quality Analysis</strong></h4>
+                                            <p class="text-muted font-14 m-b-30">Analysis of quality management operations.</p> 
+                                
+                                            <!-- <div class="form-horizontal m-t-15 m-b-20">
+                                                <div class="form-group">
+                                                    <label class="col-md-3 control-label"></label>
+                                                    <div class="col-md-4">
+                                                        <div class="btn-group navigator" style="display: block;">
+                                                            <button type="button" class="btn btn-default dropdown-toggle waves-effect waves-light btn-block" data-toggle="dropdown" aria-expanded="false" style="text-align: left;" data-type="global">All Quality Assessments<span class="caret caret-positioning"></span></button>
+                                                            <ul class="dropdown-menu drop_list" style="margin-top: 35px;"></ul>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="btn-group">
+                                                            <button type="button" class="btn range btn-default waves-effect" data-duration="days">Days</button>
+                                                            <button type="button" class="btn range btn-default waves-effect" data-duration="weeks">Weeks</button>
+                                                            <button type="button" class="btn range btn-purple waves-effect" data-duration="months">Months</button>
+                                                            <button type="button" class="btn range btn-default waves-effect" data-duration="years">Years</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div> -->
+                                
+
+                                            </script>
+                                
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

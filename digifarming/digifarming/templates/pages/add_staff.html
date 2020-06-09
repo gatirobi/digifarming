@@ -1,80 +1,72 @@
-{% extends 'base/authentication_base.html' %}
+{% extends 'base/main_base.html' %}
 {% load widget_tweaks %}
-
-{% block authentication_base %}
-    <div class="auth_content">
-        <form method="post" action="{% url 'user_register' %}" id="admin_register_form">
-            {% csrf_token %}
-            {% include 'common/includes/messages.html' %}
-            <div class="auth_errors" id="admin_auth_errors">
-
-            </div>
-            <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                    <div class="form-group">
-                        <label>First Name *</label>
-                        {% render_field user_form.first_name class="form-control" %}
+{% block content %}
+    <div class="app-inner-layout app-inner-layout-page">
+        <div class="app-inner-layout__wrapper">
+            <div class="app-inner-layout__content pt-1">
+                <div class="tab-content">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="main-card mb-3 card">
+                                    <div class="card-header">
+                                        Add Staff Form
+                                    </div>
+                                    <div class="card-body">
+                                        {% include 'common/includes/messages.html' %}
+                                        <form method="post" action="{% url 'add-staff' %}"
+                                              id="admin_submission_form"
+                                              data-stations-url="{% url 'add-harvest-dispatch-ajax' %}"
+                                              enctype="multipart/form-data">
+                                            {% csrf_token %}
+                                            <div class="form_errors" id="admin_submission_errors">
+                                                <!-- Errors div -->
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-6 col-md-6 col-sm-4 col-xs-12">
+                                                    <div class="form-group">
+                                                        <label>User *</label>
+                                                        {% render_field staff_form.staff_user class="form-control"%}
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6 col-md-6 col-sm-4 col-xs-12">
+                                                    <div class="form-group">
+                                                        <label>Staff ID *</label>
+                                                        {% render_field staff_form.staff_id class="form-control"%}
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6 col-md-6 col-sm-4 col-xs-12">
+                                                    <div class="form-group">
+                                                        <label>Job Title *</label>
+                                                        {% render_field staff_form.staff_job_title class="form-control"%}
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6 col-md-6 col-sm-4 col-xs-12">
+                                                    <div class="form-group">
+                                                        <label>Job Shift *</label>
+                                                        {% render_field staff_form.staff_job_shift class="form-control"%}
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6 col-md-6 col-sm-4 col-xs-12">
+                                                    <div class="form-group">
+                                                        <label>Is the staff an HR? *</label>
+                                                        {% render_field staff_form.is_hr class="form-control"%}
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                    <button type="submit" class="btn btn-primary btn-submit save_btn">
+                                                        Create Order
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                    <div class="form-group">
-                        <label>Last Name *</label>
-                        {% render_field user_form.last_name class="form-control" %}
-                    </div>
-                </div>
             </div>
-
-            <div class="form-group">
-                <label>Phone *</label>
-                {% render_field user_form.phone class="form-control"%}
-            </div>
-
-            <div class="form-group">
-                <label>Email Address *</label>
-                {% render_field user_form.email class="form-control"%}
-            </div>
-            <div class="form-group">
-                <label>Password *</label>
-                {% render_field user_form.password1 class="form-control" %}
-                <small class="form-text text-muted">
-                    <ul>
-                        <li>Password must contain atleast 8 characters.</li>
-                        <li>Password can't be a commonly used password.</li>
-                        <li>Password can't be entirely numeric.</li>
-                    </ul>
-                </small>
-            </div>
-            <div class="form-group">
-                <label>Confirm Password *</label>
-                {% render_field user_form.password2 class="form-control" %}
-                <small class="form-text text-muted">
-                    Passwords must match.
-                </small>
-            </div>
-            <div class="form-group">
-                <label>Staff ID *</label>
-                {% render_field staff_form.staff_id class="form-control"%}
-            </div>
-            <div class="form-group">
-                <label>Job Title *</label>
-                {% render_field staff_form.staff_job_title class="form-control"%}
-            </div>
-            <div class="form-group">
-                <label>Job Shift *</label>
-                {% render_field staff_form.staff_job_shift class="form-control"%}
-            </div>
-            <div class="form-group">
-                <label>Is the staff an HR? *</label>
-                {% render_field staff_form.is_hr class="form-control"%}
-            </div>
-
-
-            <!-- <div class="g-recaptcha" data-sitekey="6Ld7M9cUAAAAACfKKSVmnianHggA7F4q8Cp5i_Cz"></div> -->
-
-            <button type="submit" class="btn btn-primary btn-submit save_btn">Create Staff Account</button>
-        </form>
-        <p class="text-center auth_redirect">
-            Already have an account? <a href="{% url 'user_login' %}">Login Here</a>
-        </p>
+        </div>
     </div>
 {% endblock %}

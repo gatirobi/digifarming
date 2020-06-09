@@ -52,8 +52,10 @@ class JobTitle(models.Model):
 class JobShift(models.Model):
     id = HashidAutoField(primary_key=True)
     job_shift = models.CharField(max_length=100, null=False)
-    shift_start_time = models.TimeField(null=False)
-    shift_end_time = models.TimeField(null=False)
+    shift_start_time = models.CharField(max_length=50, null=False)
+    shift_end_time = models.CharField(max_length=50, null=False)
+    # shift_start_time = models.TimeField(null=False)
+    # shift_end_time = models.TimeField(null=False)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     created_on = models.DateTimeField(default=timezone.now, null=False)
     job_shift_status = models.IntegerField(default=1)
@@ -64,13 +66,16 @@ class JobShift(models.Model):
 
 class Staff(models.Model):
     id = HashidAutoField(primary_key=True)
-    staff_user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='staff_user')
+    staff_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='staff_user')
     staff_id = models.CharField(null=False, max_length=100)
     staff_job_title = models.ForeignKey(JobTitle, on_delete=models.CASCADE)
     staff_job_shift = models.ForeignKey(JobShift, on_delete=models.CASCADE)
     is_hr = models.BooleanField(null=False, default=False)
     staff_created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='staff_created_by')
     staff_end_date = models.DateTimeField(blank=True, null=True)
+
+    def __str__(self):
+        return self.staff_user
 
 
 # class Client(models.Model):
@@ -99,11 +104,17 @@ class Facility(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     created_on = models.DateTimeField(default=timezone.now)
 
+    def __str__(self):
+        return self.facility_name
+
 # Cleaning
 class Cleaning(models.Model):
     cleaning_staff = models.ForeignKey(User, on_delete=models.CASCADE)
     cleaning_facility = models.ForeignKey(Facility, on_delete=models.CASCADE)
     cleaning_time = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return self.cleaning_staff
 
 
 class Rating(models.Model):
@@ -112,12 +123,18 @@ class Rating(models.Model):
     rating_comment = models.TextField(blank=True)
     rating_created_on = models.DateTimeField(default=timezone.now)
 
+    def __str__(self):
+        return self.rating
+
 class Chat(models.Model):
     chat_sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='chat_sender')
     chat_recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name='chat_receiver')
     chat_message = models.CharField(max_length=700, null=True)
     chat_type = models.CharField(max_length=100, null=False)
     chat_time = models.DateTimeField(null=False, default=timezone.now)
+
+    def __str__(self):
+        return self.chat_message
 
 class RequestType(models.Model):
     request_type_name = models.CharField(max_length=50, null=False)
@@ -131,7 +148,11 @@ class RequestType(models.Model):
 class Request(models.Model):
     request_user = models.ForeignKey(User, on_delete=models.CASCADE)
     request_request_type = models.ForeignKey(RequestType, models.CASCADE)
+    request_name = models.CharField(null=False, max_length=100)
     request_created_on = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return self.request_name
 
 
 class AlertType(models.Model):
@@ -148,6 +169,10 @@ class Alert(models.Model):
     alert_message = models.TextField(null=False)
     alert_created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     alert_created_on = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return self.alert_title
+
 
 
 class CommodityCategory(models.Model):
@@ -242,6 +267,10 @@ class Client(models.Model):
     client_created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     client_status = models.IntegerField(null=False, default=1)
 
+    def __str__(self):
+        return self.client_full_name
+
+
 # Supplying stuff to the client
 class Supply(models.Model):
     supply_commodity = models.ForeignKey(Commodity, on_delete=models.CASCADE)
@@ -255,6 +284,9 @@ class Supply(models.Model):
     supply_created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     supply_created_on = models.DateTimeField(null=False, default=timezone.now)
 
+    def __str__(self):
+        return self.supply_commodity
+
 # DispatchStock
 class HarvestDispatch(models.Model):
     dispatch_commodity = models.ForeignKey(Commodity, on_delete=models.CASCADE)
@@ -264,6 +296,9 @@ class HarvestDispatch(models.Model):
     dispatch_facility = models.ForeignKey(Facility, on_delete=models.CASCADE)
     dispatch_created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='dispatcher')
     dispatch_created_on = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return self.dispatch_commodity
 
 class CustomerTransportation(models.Model):
     customer_commodity = models.ForeignKey(Commodity, on_delete=models.CASCADE)
@@ -275,6 +310,9 @@ class CustomerTransportation(models.Model):
     customer_created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     customer_created_on = models.DateTimeField(null=False, default=timezone.now)
 
+    def __str__(self):
+        return self.customer_transport_item
+
 class Order(models.Model):
     order_created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     order_client = models.ForeignKey(Client, on_delete=models.CASCADE)
@@ -283,13 +321,19 @@ class Order(models.Model):
     order_paid = models.BooleanField(null=False, default=True)
     order_created_on = models.DateTimeField(default=timezone.now)
 
+    def __str__(self):
+        return self.order_name
+
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     order_item = models.ForeignKey(Commodity, on_delete=models.CASCADE)
     order_type = models.ForeignKey(CommodityType, on_delete=models.CASCADE)
     order_item_quantity = models.IntegerField(null=False, default=1)
-    order_item_cost = models.IntegerField(null=False)
+    order_item_cost = models.IntegerField(null=False, default=0)
+
+    def __str__(self):
+        return self.order_item
 
 
 
@@ -298,6 +342,9 @@ class UserTrackingMovements(models.Model):
     user_tracking_facility = models.ForeignKey(Facility, on_delete=models.CASCADE)
     user_tracking_status = models.CharField(max_length=100, null=False)
     user_tracking_created_on = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return self.user_tracking
 
 # Views definitions
 class ArrivalView(models.Model):

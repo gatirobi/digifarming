@@ -14,9 +14,9 @@
                                      </div>
                                      <div class="card-body">
                                          {% include 'common/includes/messages.html' %}
-                                         <form method="post" action="{% url 'add_order_item_ajax' %}"
+                                         <form method="post" action="{% url 'add-transport-items-ajax' %}"
                                                id="admin_submission_form"
-                                               data-stations-url="{% url 'add_harvest_dispatch_ajax' %}"
+                                               data-stations-url="{% url 'add-harvest-dispatch-ajax' %}"
                                                enctype="multipart/form-data">
                                              {% csrf_token %}
                                              <div class="form_errors" id="admin_submission_errors">
@@ -28,7 +28,7 @@
                                                          <label>Tranport Category *</label>
                                                          {% render_field form.transport_category class="form-control" %}
                                                          <small class="form-text text-muted">
-                                                             Choose the client who wants to make this order
+                                                             Choose the transit category. 
                                                          </small>
                                                      </div>
                                                  </div>
@@ -37,7 +37,7 @@
                                                          <label>Transport Type Name *</label>
                                                          {% render_field form.transport_type class="form-control" %}
                                                          <small class="form-text text-muted">
-                                                             This is the order you wish to create
+                                                             This type of the transport category
                                                          </small>
                                                      </div>
                                                  </div>

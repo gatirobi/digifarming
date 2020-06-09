@@ -10,13 +10,13 @@
                             <div class="col-md-12">
                                 <div class="main-card mb-3 card">
                                     <div class="card-header">
-                                        Add Commodity Type
+                                        Add Commodity Form
                                     </div>
                                     <div class="card-body">
                                         {% include 'common/includes/messages.html' %}
-                                        <form method="post" action="{% url 'add_supply_ajax' %}"
+                                        <form method="post" action="{% url 'add-commodity-ajax' %}"
                                                 id="admin_submission_form"
-                                                data-stations-url="{% url 'add_harvest_dispatch_ajax' %}"
+                                                data-stations-url="{% url 'add-harvest-dispatch-ajax' %}"
                                                 enctype="multipart/form-data">
                                             {% csrf_token %}
                                             <div class="form_errors" id="admin_submission_errors">

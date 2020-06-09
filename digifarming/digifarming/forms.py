@@ -4,6 +4,9 @@ from django.core.exceptions import ValidationError
 from .models import JobTitle, JobShift, User, Staff, Facility, FacilityType, ClientType, Client, \
     CommodityCategory, CommodityType, CommodityMetric, Commodity, TransportCategory, TransportType, TransportItems, \
     CustomerTransportation, HarvestDispatch, Order, OrderItem,  Supply    
+from bootstrap3_datetime.widgets import DateTimePicker
+from django.contrib.admin import widgets                                       
+
 
 
 class JobTitleForm(forms.ModelForm):
@@ -14,8 +17,23 @@ class JobTitleForm(forms.ModelForm):
 
 class JobShiftForm(forms.ModelForm):
     class Meta:
+        date_format= '%m/%d/%Y %I:%M %p'
         model = JobShift
+       
         fields = ('job_shift', 'shift_start_time', 'shift_end_time')
+
+        # shift_start_time = forms.DateTimeField(widget=DateTimePicker(options=False),
+        #                                                input_formats=[date_format],
+        #                                                help_text='For planning only. Places no restrictions on when you actually decide to start the Game.')
+            
+
+        #  shift_start_time = forms.TimeField(widget=DateTimePicker(
+        # options={"format": "%H:%M", "datepicker": False},))
+        # widgets = {
+        #     'shift_start_time' : DateTimePicker(options={"format": "DD-MM-YYYY", "pickTime": False}),
+        # }
+        # shift_start_time = forms.DateField(widget=forms.DateInput(attrs={'class':'timepicker'}))
+        
 
 class UserForm(UserCreationForm):
     class Meta:
@@ -32,7 +50,7 @@ class UserUpdateForm(forms.ModelForm):
 class StaffForm(forms.ModelForm):
   class Meta:
     model = Staff
-    fields = ('staff_id', 'staff_job_title', 'staff_job_shift', 'is_hr')
+    fields = ('staff_user', 'staff_id', 'staff_job_title', 'staff_job_shift', 'is_hr')
 
 
 # class (UserCreationForm):

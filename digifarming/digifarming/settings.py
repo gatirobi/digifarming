@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django',
     'widget_tweaks',
-    'digifarming'
+    'digifarming',
+    'bootstrap3_datetime'
 
 ]
 

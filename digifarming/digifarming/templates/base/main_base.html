@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta http-equiv="Content-Language" content="en">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>CKAN - Data Upload</title>
+    <title>m-Kulima</title>
     <meta name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no"
     />
@@ -22,6 +22,9 @@
           href="{% static 'assets/pe7s-icons/pe-icon-7-stroke/css/helper.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'assets/fontawesome/css/all.min.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/themify-icons.css' %}"/>
+
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.js"></script>
 </head>
 <body>
 <div class="app-container app-theme-gray">
@@ -35,51 +38,106 @@
                 </div>
                 <div class="scrollbar-sidebar scrollbar-container">
                     <div class="app-sidebar__inner">
-                        <ul class="vertical-nav-menu">
+                        <ul class="vertical-nav-menu" id="accordionSidebar">
                             {% with active_menu=request.session.admin_active_menu %}
-                                <li {% if active_menu == 'submissions' %} class="active" {% endif %}>
-                                    <a href="{% url 'add_supply_ajax' %}">
+                                <li class="nav-item" {% if active_menu == 'submissions' %} class="active" {% endif %}>
+                                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
                                         <p>
                                             <i class="pe-7s-portfolio icon-gradient bg-plum-plate"></i>
                                         </p>
-                                        <span>Supply</span>
+                                        <span>Harvest & Supply</span>
                                     </a>
+                                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar" aria-expanded="true" aria-controls="collapseTwo">
+                                        <div class="bg-white py-2 collapse-inner rounded">
+                                            <a class="collapse-item" href="{% url 'add-harvest-dispatch-ajax' %}">Harvest</a>
+                                            <a class="collapse-item" href="{% url 'add-supply-ajax' %}">Add Supply</a>
+                                        </div>
+                                    </div>
                                 </li>
                                 <li {% if active_menu == 'add-submission' %} class="active" {% endif %}>
-                                    <a href="{% url 'add_client_ajax' %}">
+                                    <a href="#" data-toggle="collapse" data-target="#inventoryCollapse" aria-expanded="true" aria-controls="inventoryCollapse">                                    
                                         <p>
                                             <i class="pe-7s-cloud-upload icon-gradient bg-love-kiss"></i>
                                         </p>
-                                        <span>Client</span>
+                                        <span>Inventory Management</span>
                                     </a>
-                                </li>
-                                <li {% if active_menu == 'hubs' %} class="active" {% endif %}>
-                                    <a href="{% url 'add_job_shift' %}">
-                                        <p>
-                                            <i class="pe-7s-home icon-gradient bg-sunny-morning"></i>
-                                        </p>
-                                        <span>Job shifts</span>
-                                    </a>
+                                    <div id="inventoryCollapse" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar" aria-expanded="true" aria-controls="collapseTwo">
+                                        <div class="bg-white py-2 collapse-inner rounded">
+                                            <a class="collapse-item" href="{% url 'add-commodity-ajax' %}">Add Commodity</a>
+                                            <a class="collapse-item" href="{% url 'add-commodity-category-ajax' %}">Add Commodity Category</a>
+                                            <a class="collapse-item" href="{% url 'add-commodity-type-ajax' %}">Add Commodity Type</a>
+                                            <a class="collapse-item" href="{% url 'add-commodity-metric-ajax' %}">Add Commodity Metric</a>
+                                        </div>
+                                    </div>
                                 </li>
                                 <li {% if active_menu == 'stations' %} class="active" {% endif %}>
-                                    <a href="{% url 'add_job_title' %}">
+                                    <a href="#" data-toggle="collapse" data-target="#orderCollapse" aria-expanded="true" aria-controls="orderCollapse">
                                         <p>
-                                            <i class="pe-7s-culture icon-gradient bg-malibu-beach"></i>
+                                            <i class="pe-7s-cash icon-gradient bg-malibu-beach"></i>
                                         </p>
-                                        <span>Job titles</span>
+                                        <span>Orders & Clients</span>
                                     </a>
+                                    <div id="orderCollapse" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar" aria-expanded="true" aria-controls="collapseTwo">
+                                        <div class="bg-white py-2 collapse-inner rounded">
+                                            <a class="collapse-item" href="{% url 'add-order-ajax' %}">Add Order</a>
+                                            <a class="collapse-item" href="{% url 'add-order-item-ajax' %}">Populate Order</a>
+                                        </div>
+                                    </div>
                                 </li>
-                                <li {% if active_menu == 'donors' %} class="active" {% endif %}>
-                                    <a href="{% url 'add_staff' %}">
+                                <li {% if active_menu == 'stations' %} class="active" {% endif %}>
+                                    <a href="#" data-toggle="collapse" data-target="#hrCollapse" aria-expanded="true" aria-controls="hrCollapse">
                                         <p>
-                                            <i class="pe-7s-cash icon-gradient bg-grow-early"></i>
+                                            <i class="pe-7s-alarm icon-gradient bg-plum-plate"></i>
                                         </p>
-                                        <span>Staff</span>
+                                        <span>Human Resource</span>
                                     </a>
+                                    <div id="hrCollapse" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar" aria-expanded="true" aria-controls="collapseTwo">
+                                        <div class="bg-white py-2 collapse-inner rounded">
+                                            <a class="collapse-item" href="{% url 'add-staff' %}">Add Staff</a>
+                                            <a class="collapse-item" href="{% url 'current-staff' %}">All Staff</a>
+                                            <a class="collapse-item" href="{% url 'add-job-title' %}">Add Job Title</a>
+                                            <a class="collapse-item" href="{% url 'all-job-titles' %}">View Job Titles</a>
+                                            <a class="collapse-item" href="{% url 'add-job-shift' %}">Add Job Shift</a>
+                                            <a class="collapse-item" href="{% url 'all-job-shifts' %}">View Job Shifts</a>
+
+                                        </div>
+                                    </div>
+                                </li>
+                                <!-- hourglass portfolio refresh-2 id -->
+                                <li {% if active_menu == 'donors' %} class="active" {% endif %}>
+                                    <a href="#" data-toggle="collapse" data-target="#facilityCollapse" aria-expanded="true" aria-controls="facilityCollapse">
+                                        <p>
+                                            <i class="pe-7s-culture icon-gradient bg-grow-early"></i>
+                                        </p>
+                                        <span>Facility Management</span>
+                                    </a>
+                                    <div id="facilityCollapse" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar" aria-expanded="true" aria-controls="collapseTwo">
+                                        <div class="bg-white py-2 collapse-inner rounded">
+                                            <a class="collapse-item" href="{% url 'add-facility-ajax' %}">Add Facility</a>
+                                            <a class="collapse-item" href="{% url 'add-facility-type-ajax' %}">Add Facility Type</a>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li {% if active_menu == 'stations' %} class="active" {% endif %}>
+                                    <a href="#" data-toggle="collapse" data-target="#transportCollapse" aria-expanded="true" aria-controls="transportCollapse">
+                                        <p>
+                                            <i class="pe-7s-car icon-gradient bg-malibu-beach"></i>
+                                        </p>
+                                        <span>Transportation</span>
+                                    </a>
+                                    <div id="transportCollapse" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar" aria-expanded="true" aria-controls="collapseTwo">
+                                        <div class="bg-white py-2 collapse-inner rounded">
+                                            <a class="collapse-item" href="{% url 'add-customer-transportation-ajax' %}">Customer Transportation</a>
+                                            <a class="collapse-item" href="{% url 'add-transport-items-ajax' %}">Add Tranport Vessels</a>
+                                            <a class="collapse-item" href="{% url 'add-transport-category-ajax' %}">Add Transport Category</a>
+                                            <a class="collapse-item" href="{% url 'add-transport-type-ajax' %}">Add Transit Vessel Type</a>
+                                            <br/><br/><br/><br/><br/>
+                                        </div>
+                                    </div>
                                 </li>
                                 {% if request.user.user_role == 1 %}
                                 <li {% if active_menu == 'users' %} class="active" {% endif %}>
-                                    <a href="{% url 'current_staff' %}">
+                                    <a href="{% url 'current-staff' %}">
                                         <p>
                                             <i class="pe-7s-users icon-gradient bg-ripe-malin"></i>
                                         </p>
@@ -177,5 +235,7 @@
 <script type="text/javascript" src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/script.js' %}"></script>
+<script src="https://d3js.org/d3.v5.js"></script>
+
 </body>
 </html>

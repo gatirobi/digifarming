@@ -189,10 +189,10 @@ def add_order_ajax(request, **kwargs):
         form = OrderForm(request.POST)
         if form.is_valid():
             order = form.save(commit=False)
-            order.order_created_by = request.user
+            order.order_created_by_id = request.user.id
             order.save()
             messages.success(request, 'Order was added successfully')
-            return redirect('add_order_ajax')
+            return redirect('add-order-item-ajax')
 
     else:
         form = OrderForm()
@@ -246,7 +246,7 @@ def add_order_item_ajax(request, **kwargs):
             order = form.save(commit=False)
             order.save()
             messages.success(request, 'Order Item was added successfully')
-            return redirect('add_order_item_ajax')
+            return redirect('add-order-item-ajax')
 
     else:
         form = OrderItemForm()
@@ -298,9 +298,10 @@ def add_supply_ajax(request, **kwargs):
         form = SupplyForm(request.POST)
         if form.is_valid():
             supply = form.save(commit=False)
+            supply.supply_created_by_id = request.user.id
             supply.save()
             messages.success(request, 'Supply was added successfully')
-            return redirect('add_supply_ajax')
+            return redirect('add-supply-ajax')
 
     else:
         form = SupplyForm()
@@ -362,7 +363,7 @@ def add_worker_ajax(request, **kwargs):
                 staff.staff_job_title = request_params.get('staff_job_title')
                 staff.staff_job_shift = request_params.get('staff_job_shift')
                 staff.is_hr = request_params.get('is_hr')
-                # staff.staff_created_by = request_params.get('staff_created_by')
+                # staff.staff_created_by_id = request_params.get('staff_created_by')
                 staff.save()
                 
                 return http.HttpResponse(
@@ -414,11 +415,11 @@ def add_harvest_dispatch_ajax(request, **kwargs):
         form = HarvestDispatchForm(request.POST)
         if form.is_valid():
             harvest_dispatch = form.save(commit=False)
-            harvest_dispatch.dispatch_to_staff = request.user
-            harvest_dispatch.dispatch_created_by = request.user
+            harvest_dispatch.dispatch_to_staff_id = request.user.id
+            harvest_dispatch.dispatch_created_by_id = request.user.id
             harvest_dispatch.save()
             messages.success(request, 'Transport dispatch was added successfully')
-            return redirect('add_harvest_dispatch_ajax')
+            return redirect('add-harvest-dispatch-ajax')
 
     else:
         form = HarvestDispatchForm()
@@ -470,10 +471,10 @@ def add_customer_transportation_ajax(request, **kwargs):
         form = CustomerTransportationForm(request.POST)
         if form.is_valid():
             customer_transportation = form.save(commit=False)
-            customer_transportation.customer_created_by = request.user
+            customer_transportation.customer_created_by_id = request.user.id
             customer_transportation.save()
             messages.success(request, 'Transport transportation was added successfully')
-            return redirect('add_customer_transportation_ajax')
+            return redirect('add-customer-transportation-ajax')
 
     else:
         form = CustomerTransportationForm()
@@ -525,10 +526,10 @@ def add_transport_items_ajax(request, **kwargs):
         form = TransportItemsForm(request.POST)
         if form.is_valid():
             transport_items = form.save(commit=False)
-            transport_items.created_by = request.user
+            transport_items.transport_created_by_id = request.user.id
             transport_items.save()
-            messages.success(request, 'Transport items was added successfully')
-            return redirect('add_transport_items_ajax')
+            messages.success(request, 'Transport item was added successfully')
+            return redirect('add-transport-items-ajax')
 
     else:
         form = TransportItemsForm()
@@ -580,10 +581,10 @@ def add_transport_type_ajax(request, **kwargs):
         form = TransportTypeForm(request.POST)
         if form.is_valid():
             transport_type = form.save(commit=False)
-            transport_type.created_by = request.user
+            transport_type.transport_type_created_by_id = request.user.id
             transport_type.save()
             messages.success(request, 'Transport type was added successfully')
-            return redirect('add_transport_type_ajax')
+            return redirect('add-transport-type-ajax')
 
     else:
         form = TransportTypeForm()
@@ -635,10 +636,10 @@ def add_transport_category_ajax(request, **kwargs):
         form = TransportCategoryForm(request.POST)
         if form.is_valid():
             transport_category = form.save(commit=False)
-            transport_category.created_by = request.user
+            transport_category.transport_category_created_by_id = request.user.id
             transport_category.save()
             messages.success(request, 'Transport category was added successfully')
-            return redirect('add_transport_category_ajax')
+            return redirect('add-transport-category-ajax')
 
     else:
         form = TransportCategoryForm()
@@ -691,10 +692,10 @@ def add_commodity_ajax(request, **kwargs):
         form = CommodityForm(request.POST)
         if form.is_valid():
             commodity = form.save(commit=False)
-            commodity.commodity_created_by = request.user
+            commodity.commodity_created_by_id = request.user.id
             commodity.save()
             messages.success(request, 'Commodity was added successfully')
-            return redirect('add_commodity_ajax')
+            return redirect('add-commodity-ajax')
 
     else:
         form = CommodityForm()
@@ -746,10 +747,10 @@ def add_commodity_metric_ajax(request, **kwargs):
         form = CommodityMetricForm(request.POST)
         if form.is_valid():
             commodity_metric = form.save(commit=False)
-            commodity_metric.commodity_metric_created_by = request.user
+            commodity_metric.commodity_metric_created_by_id = request.user.id
             commodity_metric.save()
             messages.success(request, 'Commodity metric was added successfully')
-            return redirect('add_commodity_metric_ajax')
+            return redirect('add-commodity-metric-ajax')
 
     else:
         form = CommodityMetricForm()
@@ -802,10 +803,10 @@ def add_commodity_type_ajax(request, **kwargs):
         form = CommodityTypeForm(request.POST)
         if form.is_valid():
             commodity_type = form.save(commit=False)
-            commodity_type.commodity_type_created_by = request.user
+            commodity_type.commodity_type_created_by_id = request.user.id
             commodity_type.save()
             messages.success(request, 'Commodity type was added successfully')
-            return redirect('add_commodity_type_ajax')
+            return redirect('add-commodity-type-ajax')
 
     else:
         form = CommodityTypeForm()
@@ -857,10 +858,10 @@ def add_commodity_category_ajax(request, **kwargs):
         form = CommodityCategoryForm(request.POST)
         if form.is_valid():
             commodity_category = form.save(commit=False)
-            commodity_category.commodity_category_created_by = request.user
+            commodity_category.commodity_category_created_by_id = request.user.id
             commodity_category.save()
-            messages.success(request, 'CommodityCategory was added successfully')
-            return redirect('add_commodity_category_ajax')
+            messages.success(request, 'Commodity Category was added successfully')
+            return redirect('add-commodity-category-ajax')
 
     else:
         form = CommodityCategoryForm()
@@ -908,15 +909,26 @@ def delete_commodity_category_ajax(request, **kwargs):
 
 
 # Creating  a new client
-def add_client_ajax(request, **kwargs):
+def add_client_ajax(request):
     if request.method == "POST":
         form = ClientForm(request.POST)
         if form.is_valid():
-            client = form.save(commit=False)
-            client.created_by = request.user
-            client.save()
-            messages.success(request, 'Client was added successfully')
-            return redirect('add_client_ajax')
+            try:
+                client = form.save(commit=False)
+                client.client_created_by_id = request.user.id
+                client.save()
+                messages.success(request, 'client was added successfully')
+                return redirect('add-client-type-ajax')
+                # return reverse('digifarming:add-client-ajax')
+            except (ValueError, KeyError):
+                messages.add_message(request, messages.ERROR, 'Invalid values encountered, Server Error')
+
+        # if form.is_valid():
+        #     client = form.save(commit=False)
+        #     client.client_created_by_id = request.user.id
+        #     client.save()
+        #     messages.success(request, 'Client was added successfully')
+        #     return redirect('add_client_ajax')
 
     else:
         form = ClientForm()
@@ -964,15 +976,19 @@ def delete_client_ajax(request, **kwargs):
 
 
 # Creating  a new client type
-def add_client_type_ajax(request, **kwargs):
+def add_client_type_ajax(request):
     if request.method == "POST":
         form = ClientTypeForm(request.POST)
         if form.is_valid():
-            client_type = form.save(commit=False)
-            client_type.created_by_id = request.user.id
-            client_type.save()
-            messages.success(request, 'client type was added successfully')
-            return redirect('add_client_ajax')
+            try:
+                client_type = form.save(commit=False)
+                client_type.client_type_created_by_id = request.user.id
+                client_type.save()
+                messages.success(request, 'client type was added successfully')
+                return redirect('add-client-type-ajax')
+                # return reverse('digifarming:add-client-ajax')
+            except (ValueError, KeyError):
+                messages.add_message(request, messages.ERROR, 'Invalid values encountered, Server Error')
 
     else:
         form = ClientTypeForm()
@@ -1027,10 +1043,10 @@ def add_facility_type_ajax(request, **kwargs):
         form = FacilityTypeForm(request.POST)
         if form.is_valid():
             facility_type = form.save(commit=False)
-            facility_type.created_by = request.user
+            facility_type.facility_type_created_by_id = request.user.id
             facility_type.save()
             messages.success(request, 'Facility type was added successfully')
-            return redirect('add_facility_type_ajax')
+            return redirect('add-facility-type-ajax')
 
     else:
         form = FacilityTypeForm()
@@ -1085,10 +1101,10 @@ def add_facility_ajax(request, **kwargs):
         form = FacilityForm(request.POST)
         if form.is_valid():
             facility = form.save(commit=False)
-            facility.created_by = request.user
+            facility.created_by_id = request.user.id
             facility.save()
             messages.success(request, 'Facility was added successfully')
-            return redirect('add_facility_ajax')
+            return redirect('add-facility-ajax')
 
     else:
         form = FacilityForm()
@@ -1221,7 +1237,7 @@ def user_login(request):
 
             if user is not None:
                 login(request, user)
-                return redirect('add_facility_ajax')
+                return redirect('add-facility-ajax')
             else:
                 try:
                     user = User.objects.get(email=email)
@@ -1245,10 +1261,10 @@ def add_job_title(request):
         form = JobTitleForm(request.POST)
         if form.is_valid():
             job_title = form.save(commit=False)
-            job_title.job_created_by = request.user
+            job_title.job_created_by_id = request.user.id
             job_title.save()
             messages.success(request, 'Job title was created successfully')
-            return redirect('add_job_title')
+            return redirect('add-job-title')
 
     else:
         form = JobTitleForm()
@@ -1320,10 +1336,10 @@ def add_job_shift(request):
         form = JobShiftForm(request.POST)
         if form.is_valid():
             job_shift = form.save(commit=False)
-            job_shift.created_by = request.user
+            job_shift.created_by_id = request.user.id
             job_shift.save()
             messages.success(request, 'Job shift was added successfully')
-            return redirect('add_job_shift')
+            return redirect('add-job-shift')
 
     else:
         form = JobShiftForm()
@@ -1381,24 +1397,25 @@ def deactivate_job_shift(request, job_shift_id):
 # @login_required
 def add_staff(request):
     if request.method == "POST":
-        user_form = UserForm(request.POST)
+        # user_form = UserForm(request.POST)
         staff_form = StaffForm(request.POST)
 
-        if user_form.is_valid() and staff_form.is_valid():
+        if staff_form.is_valid():
             # Save general user details
-            user = user_form.save(commit=False)
-            user.is_staff = True
-            user.save()
+            # user = user_form.save(commit=False)
+            # user.is_staff = True
+            # user.save()
+            
 
             # Save staff specific details
             staff = staff_form.save(commit=False)
-            staff.staff_user = user
-            staff.staff_created_by = request.user
+            # staff.staff_user_id = user.id
+            staff.staff_created_by_id = request.user.id
             staff.save()
 
             # Success message
             messages.success(request, 'The staff has been successfully created')
-            return redirect('add_staff')
+            return redirect('add-staff')
 
     else:
         user_form = UserForm()
@@ -1475,3 +1492,7 @@ def deactivate_staff(request, staff_id):
 
     messages.add_message(request, messages.SUCCESS, 'Staff was removed successfully')
     return redirect('current_staff')
+
+def all_visualizations(request):
+    context = {'page_title': 'Visualization', 'page_description': 'Visualisations and trends'}
+    return render(request, 'pages/visualization.html', context)

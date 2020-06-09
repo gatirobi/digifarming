@@ -14,9 +14,9 @@
                                     </div>
                                     <div class="card-body">
                                         {% include 'common/includes/messages.html' %}
-                                        <form method="post" action="{% url 'add_supply_ajax' %}"
+                                        <form method="post" action="{% url 'add-facility-ajax' %}"
                                               id="admin_submission_form"
-                                              data-stations-url="{% url 'add_harvest_dispatch_ajax' %}"
+                                              data-stations-url="{% url 'add-harvest-dispatch-ajax' %}"
                                               enctype="multipart/form-data">
                                             {% csrf_token %}
                                             <div class="form_errors" id="admin_submission_errors">
@@ -52,10 +52,10 @@
                                                 </div>
                                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                     <div class="form-group">
-                                                        <label>Facility location *</label>
+                                                        <label>Facility capacity *</label>
                                                         {% render_field form.facility_capacity class="form-control" %}
                                                         <small class="form-text text-muted">
-                                                            Facility location
+                                                            Facility capacity
                                                         </small>
                                                     </div>
                                                 </div>
