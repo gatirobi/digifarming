@@ -1494,5 +1494,5 @@ def deactivate_staff(request, staff_id):
     return redirect('current_staff')
 
 def all_visualizations(request):
-    context = {'page_title': 'Visualization', 'page_description': 'Visualisations and trends'}
+    context = {'name': 'Visualization'}
     return render(request, 'pages/visualization.html', context)

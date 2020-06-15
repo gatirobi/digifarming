@@ -1,4 +1,4 @@
-{% extends 'base/main_base.html' %}
+{% extends 'base/main_base_home.html' %}
 {% load widget_tweaks %}
 {% block content %}
 
@@ -19,203 +19,1081 @@
                                         <!-- {% include 'common/includes/messages.html' %} -->
                                         <!-- content -->
 
-                                        <!-- <div class="row">
-                                            <div class="col-lg-3 col-md-6">
-                                                <div class="card-box widget-box-three">
-                                                    <div class="bg-icon pull-left">
-                                                        <i class="ti-shopping-cart text-purple"></i>
-                                                    </div>
-                                                    <div class="text-right">
-                                                        <p class="text-muted text-uppercase font-600 font-secondary">New Orders</p>
-                                                        <h2 id="new_orders_last_day" >0</h2>
-                                                        <strong><small id="new_orders_weekly_avg"></small></strong>
-                                                    </div>
-                                                </div>
-                                            </div>
+<div class="row">
+    <div class="col-lg-3 col-md-6">
+        <div class="card-box widget-box-three">
+            <div class="bg-icon pull-left">
+                <i class="ti-shopping-cart text-purple"></i>
+            </div>
+            <div class="text-right">
+                <p class="text-muted text-uppercase font-600 font-secondary">New   </br> Orders</p>
+                <h2 id="confirmed_orders_last_day" >0</h2>
+                <strong><small id="confirmed_orders_weekly_avg"></small></strong>
+            </div>
+        </div>
+    </div>
 
-                                            <div class="col-lg-3 col-md-6">
-                                                <div class="card-box widget-box-three">
-                                                    <div class="bg-icon pull-left">
-                                                        <i class="mdi mdi-calendar-check text-purple"></i>
-                                                    </div>
-                                                    <div class="text-right">
-                                                        <p class="text-muted text-uppercase font-600 font-secondary">Confirmed Orders</p>
-                                                        <h2 id="confirmed_orders_last_day" >0</h2>
-                                                        <strong><small id="confirmed_orders_weekly_avg"></small></strong>
-                                                    </div>
-                                                </div>
-                                            </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="card-box widget-box-three">
+            <div class="bg-icon pull-left">
+                <i class="mdi mdi-calendar-check text-purple"></i>
+            </div>
+            <div class="text-right">
+                <p class="text-muted text-uppercase font-600 font-secondary">Confirmed Orders</p>
+                <h2 id="confirmed_orders_last_day" >0</h2>
+                <strong><small id="confirmed_orders_weekly_avg"></small></strong>
+            </div>
+        </div>
+    </div>
 
-                                            <div class="col-lg-3 col-md-6">
-                                                <div class="card-box widget-box-three">
-                                                    <div class="bg-icon pull-left">
-                                                        <i class="mdi mdi-truck-delivery text-purple"></i>
-                                                    </div>
-                                                    <div class="text-right">
-                                                        <p class="text-muted text-uppercase font-600 font-secondary">Dispatched Orders</p>
-                                                        <h2 id="dispatched_orders_last_day" >0</h2>
-                                                        <strong><small id="dispatched_orders_weekly_avg"></small></strong>
-                                                    </div>
-                                                </div>
-                                            </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="card-box widget-box-three">
+            <div class="bg-icon pull-left">
+                <i class="mdi mdi-truck-delivery text-purple"></i>
+            </div>
+            <div class="text-right">
+                <p class="text-muted text-uppercase font-600 font-secondary">Dispatched Orders</p>
+                <h2 id="dispatched_orders_last_day" >0</h2>
+                <strong><small id="dispatched_orders_weekly_avg"></small></strong>
+            </div>
+        </div>
+    </div>
 
-                                            <div class="col-lg-3 col-md-6">
-                                                <div class="card-box widget-box-three">
-                                                    <div class="bg-icon pull-left">
-                                                        <i class="fa fa-money text-purple"></i>
-                                                    </div>
-                                                    <div class="text-right">
-                                                        <p class="text-muted text-uppercase font-600 font-secondary">Weekly Revenue</p>
-                                                        <h2 id="estimated_revenue_last_month" >0</h2>
-                                                        <strong><small id="gross_margin_last_month"></small></strong>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="card-box widget-box-three">
+            <div class="bg-icon pull-left">
+                <i class="fa fa-money text-purple"></i>
+            </div>
+            <div class="text-right">
+                <p class="text-muted text-uppercase font-600 font-secondary">Weekly Revenue</p>
+                <h2 id="estimated_revenue_last_month" >0</h2>
+                <strong><small id="gross_margin_last_month"></small></strong>
+            </div>
+        </div>
+    </div>
+</div>
 
-                                        <div class="row">
-                                            <div class="col-sm-6 col-xs-12">
-                                                <div class="card-box">
-                                                    <h4 class="header-title m-t-0">Dispatch Volume</h4>
-                                                    <p class="text-muted font-14">
-                                                        The total volume of stems dispatched over the last 7 days.
-                                                    </p>
-                                                    <div id="header_total_stems_dispatched" class="m-t-10 text-center"></div>
-                                                    <div id="chart_total_stems_dispatched" class="m-t-10" style="height: 250px;"></div>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-sm-6 col-xs-12">
-                                                <div class="card-box">
-                                                    <h4 class="header-title m-t-0">Production vs Exports</h4>
-                                                    <p class="text-muted font-14">
-                                                        Comparison of total stems harvested and proportional exports.
-                                                    </p>
-                                                    <div id="header_prod_exports" class="m-t-10 text-center"></div>
-                                                    <div id="chart_prod_exports" class="m-t-10" style="height: 250px;"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-lg-4">
-                                                <div class="card-box">
-                                                    <h4 class="header-title m-t-0">Top Varieties</h4>
-                                                    <p class="text-muted font-14">Highest volumes over the last 7 days.</p>
-                                                    <div class="table-responsive">
-                                                        <table id="tbl_top_sellers" class="table table table-hover m-0 custom_header nowrap responsive">
-                                                            <thead>
-                                                                <tr class="active">
-                                                                    <th width="60%">Variety</th>
-                                                                    <th class="text-center">Volume</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody></tbody>
-                                                        </table>
-                                                    </div> 
-                                                </div>
-                                            </div>
-
-                                            <div class="col-lg-4">
-                                                <div class="card-box">
-                                                    <select class="selectpicker pull-right form-control show-tick convert_currency" data-width="fit">
-                                                        <option value="eur">EUR</option>
-                                                        <option value="usd">USD</option>
-                                                        <option value="gbp">GBP</option>
-                                                        <option value="kes">KES</option>
-                                                    </select>
-                                                    <h4 class="m-t-0 header-title"><b>Top Lines</b></h4>
-                                                    <p class="text-muted font-14">Highest demand over the last 7 days.</p>
-                                                    <div class="table-responsive">
-                                                        <table id="tbl_top_lines" class="table table-hover m-0 custom_header nowrap responsive">
-                                                            <thead>
-                                                                <tr class="active">
-                                                                    <th width="70%">Line</th>
-                                                                    <th class="text-center">Revenue</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody></tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                            </div> 
-
-                                            <div class="col-lg-4">
-                                                <div class="card-box">
-                                                    <select class="selectpicker pull-right form-control show-tick convert_currency" data-width="fit">
-                                                        <option value="eur">EUR</option>
-                                                        <option value="usd">USD</option>
-                                                        <option value="gbp">GBP</option>
-                                                        <option value="kes">KES</option>
-                                                    </select>
-                                                    <h4 class="header-title m-t-0">Top Accounts</h4>
-                                                    <p class="text-muted font-14">Highest revenue in the last 7 days.</p>
-
-                                                    <div class="table-responsive">
-                                                        <table id="tbl_top_accounts" class="table table-hover m-0 custom_header nowrap responsive">
-                                                            <thead>
-                                                                <tr class="active">
-                                                                    <th width="70%">Account</th>
-                                                                    <th class="text-center">Revenue</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody></tbody>
-                                                        </table>
-                                                    </div>
-                                                </div> 
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-sm-8 col-xs-12">
-                                                <div class="card-box">
-                                                    <h4 class="header-title m-t-0">Global Footprint</h4>
-                                                    <p class="text-muted font-14">Locations where product was shipped to over the last 7 days.</p>
-                                                    <div id="mapcontainer" class="m-t-20">
-                                                        <div class="map center-block" style="max-width: 80%">Loading chart..</div>
-                                                        <div class="plotLegend">
-                                                            <span>Loading legend..</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-4">
-                                                <div class="card-box">
-                                                    <h4 class="m-t-0 m-b-20 header-title"><strong>Latest Notifications</strong></h4>
-                                                    <div id="notifications_container" class="inbox-widget nicescroll mx-box"></div>
-                                                </div>
-                                            </div>
-                                        </div> -->
+<div class="row">
+    <div class="col-sm-6 col-xs-12">
+        <div class="card-box">
+            <h4 class="header-title m-t-0">Dispatch Volume</h4>
+            <p class="text-muted font-14">
+                The total volume of stems dispatched over the last 7 days.
+            </p>
+			<div id="header_total_stems_dispatched" class="m-t-10 text-center"></div>
+			<div id="chart_total_stems_dispatched2" class="m-t-10" style="height: 250px;"></div>
+        </div>
+    </div>
 
 
-                                        <div class="card-box">
-                                            <h4 class="m-t-0 header-title"><strong>Quality Analysis</strong></h4>
-                                            <p class="text-muted font-14 m-b-30">Analysis of quality management operations.</p> 
-                                
-                                            <!-- <div class="form-horizontal m-t-15 m-b-20">
-                                                <div class="form-group">
-                                                    <label class="col-md-3 control-label"></label>
-                                                    <div class="col-md-4">
-                                                        <div class="btn-group navigator" style="display: block;">
-                                                            <button type="button" class="btn btn-default dropdown-toggle waves-effect waves-light btn-block" data-toggle="dropdown" aria-expanded="false" style="text-align: left;" data-type="global">All Quality Assessments<span class="caret caret-positioning"></span></button>
-                                                            <ul class="dropdown-menu drop_list" style="margin-top: 35px;"></ul>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-3">
-                                                        <div class="btn-group">
-                                                            <button type="button" class="btn range btn-default waves-effect" data-duration="days">Days</button>
-                                                            <button type="button" class="btn range btn-default waves-effect" data-duration="weeks">Weeks</button>
-                                                            <button type="button" class="btn range btn-purple waves-effect" data-duration="months">Months</button>
-                                                            <button type="button" class="btn range btn-default waves-effect" data-duration="years">Years</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div> -->
-                                
+    <div class="col-sm-6 col-xs-12">
+        <div class="card-box">
+            <h4 class="header-title m-t-0">Production vs Exports</h4>
+            <p class="text-muted font-14">
+                Comparison of total stems harvested and proportional exports.
+            </p>
+			<div id="header_prod_exports" class="m-t-10 text-center"></div>
+			<div id="chart_prod_exports2" class="m-t-10" style="height: 250px;"></div>
+        </div>
+    </div>
+</div>
 
-                                            </script>
-                                
-                                        </div>
+<div id="myfirstchart" style="height: 250px;"></div>
+
+<div class="row">
+    <div class="col-lg-4">
+        <div class="card-box">
+            <h4 class="header-title m-t-0">Top Varieties</h4>
+            <p class="text-muted font-14">Highest volumes over the last 7 days.</p>
+            <div class="table-responsive">
+                <table id="tbl_top_sellers" class="table table table-hover m-0 custom_header nowrap responsive">
+                    <thead>
+                        <tr class="active">
+                            <th width="60%">Variety</th>
+                            <th class="text-center">Volume</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div> 
+        </div>
+    </div>
+
+	<div class="col-lg-4">
+        <div class="card-box">
+            <select class="selectpicker pull-right form-control show-tick convert_currency" data-width="fit">
+	            <option value="eur">EUR</option>
+	            <option value="usd">USD</option>
+	            <option value="gbp">GBP</option>
+	            <option value="kes">KES</option>
+            </select>
+            <h4 class="m-t-0 header-title"><b>Top Lines</b></h4>
+            <p class="text-muted font-14">Highest demand over the last 7 days.</p>
+            <div class="table-responsive">
+                <table id="tbl_top_lines" class="table table-hover m-0 custom_header nowrap responsive">
+                    <thead>
+                        <tr class="active">
+                            <th width="70%">Line</th>
+                            <th class="text-center">Revenue</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div> 
+
+    <div class="col-lg-4">
+        <div class="card-box">
+            <select class="selectpicker pull-right form-control show-tick convert_currency" data-width="fit">
+	            <option value="eur">EUR</option>
+	            <option value="usd">USD</option>
+	            <option value="gbp">GBP</option>
+	            <option value="kes">KES</option>
+            </select>
+            <h4 class="header-title m-t-0">Top Accounts</h4>
+            <p class="text-muted font-14">Highest revenue in the last 7 days.</p>
+
+            <div class="table-responsive">
+                <table id="tbl_top_accounts" class="table table-hover m-0 custom_header nowrap responsive">
+                    <thead>
+                        <tr class="active">
+                            <th width="70%">Account</th>
+                            <th class="text-center">Revenue</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div> 
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-8 col-xs-12">
+        <div class="card-box">
+            <h4 class="header-title m-t-0">Global Footprint</h4>
+            <p class="text-muted font-14">Locations where product was shipped to over the last 7 days.</p>
+			<div id="mapcontainer" class="m-t-20">
+			    <div class="map center-block" style="max-width: 80%">Loading chart..</div>
+				<div class="plotLegend">
+	            	<span>Loading legend..</span>
+				</div>
+			</div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card-box">
+            <h4 class="m-t-0 m-b-20 header-title"><strong>Latest Notifications</strong></h4>
+            <div id="notifications_container" class="inbox-widget nicescroll mx-box"></div>
+        </div>
+    </div>
+</div>
+
+<!-- end content -->
+
+
+<script>
+
+new Morris.Line({
+  // ID of the element in which to draw the chart.
+  element: 'myfirstchart',
+  // Chart data records -- each entry in this array corresponds to a point on
+  // the chart.
+  data: [
+    { year: '2016', value: 20 },
+    { year: '2017', value: 10 },
+    { year: '2018', value: 5 },
+    { year: '2019', value: 5 },
+    { year: '2020', value: 20 }
+  ],
+  // The name of the data record attribute that contains x-values.
+  xkey: 'year',
+  // A list of names of data record attributes that contain y-values.
+  ykeys: ['value'],
+  // Labels for the ykeys -- will be displayed when you hover over the
+  // chart.
+  labels: ['Total Revenue Projection']
+});
+
+var data2 = [
+{ y: '2014', a: 50, b: 90},
+{ y: '2015', a: 65,  b: 75},
+{ y: '2016', a: 50,  b: 50},
+{ y: '2017', a: 75,  b: 60},
+{ y: '2018', a: 80,  b: 65},
+{ y: '2019', a: 90,  b: 70},
+{ y: '2020', a: 100, b: 75},
+{ y: '2021', a: 115, b: 75},
+{ y: '2022', a: 120, b: 85},
+{ y: '2023', a: 145, b: 85},
+{ y: '2024', a: 160, b: 95}
+];
+
+new Morris.Bar({
+    // ID of the element in which to draw the chart.
+    element: 'chart_total_stems_dispatched2',
+    // Chart data records -- each entry in this array corresponds to a point on
+    // the chart.
+    data: data2,
+    // The name of the data record attribute that contains x-values.
+    xkey: 'y',
+    ykeys: ['a', 'b'],
+    // Labels for the ykeys -- will be displayed when you hover over the
+    // chart.
+    labels: ['Karen','Ravine'],
+    stacked: true
+});
+    
+var data3 = [
+{ y: 'Tue 2nd', a: 50, b: 90},
+{ y: 'Wed 3rd', a: 65,  b: 75},
+{ y: 'Thur 4th', a: 50,  b: 50},
+{ y: 'Fri 5th', a: 75,  b: 60},
+{ y: 'Sat 6th', a: 80,  b: 65},
+{ y: 'Sun 7th', a: 90,  b: 70},
+{ y: 'Mon 8th', a: 100, b: 75},
+];
+ new Morris.Area({
+    element: 'chart_prod_exports2',
+    data: data3,
+    xkey: 'y',
+    ykeys: [ 'a', 'b' ],
+    labels: [ 'a', 'b' ],
+    hideHover: 'auto',
+    behaveLikeLine: true,
+    resize: true,
+    gridLineColor: '#eeeeee',
+    lineColors: ['#f38280', '#52bb56'],
+    fillOpacity: ['0.5'],
+    pointFillColors: ['#ffffff'],
+    pointStrokeColors: ['#999999'],
+    parseTime: false // remember to do this!
+});
+	$(function() {
+		
+		// ** INIT **
+		
+		var load_wave = 
+	        '<div class="sk-wave">' +
+	            '<div class="sk-rect sk-rect1"></div>' +
+	            '<div class="sk-rect sk-rect2"></div>' +
+	            '<div class="sk-rect sk-rect3"></div>' +
+	            '<div class="sk-rect sk-rect4"></div>' +
+	            '<div class="sk-rect sk-rect5"></div>' +
+	        '</div>' +
+	        '<h3>Thinking..</h3>';
+
+		
+		// get new orders		
+		function get_new_orders() {
+			
+			return $.ajax({
+				type: 'POST',
+				url: '/api/home/get_new_orders',
+				dataType: 'json',
+				beforeSend: function() {
+					swal({
+						title: load_wave,
+						html: 'Just a moment.',
+						showConfirmButton: false,
+						allowEscapeKey: false,
+						allowOutsideClick: false
+					});
+				}
+			})
+
+		}
+
+
+		// get confirmed orders		
+		function get_confirmed_orders() {
+			
+			return $.ajax({
+				type: 'POST',
+				url: '/api/home/get_confirmed_orders',
+				dataType: 'json',
+				beforeSend: function() {
+					swal({
+						title: load_wave,
+						html: 'Just a moment.',
+						showConfirmButton: false,
+						allowEscapeKey: false,
+						allowOutsideClick: false
+					});
+				}
+			})
+
+		}
+
+		
+		// get dispatched orders		
+		function get_dispatched_orders() {
+			
+			return $.ajax({
+				type: 'POST',
+				url: '/api/home/get_dispatched_orders',
+				dataType: 'json',
+				beforeSend: function() {
+					swal({
+						title: load_wave,
+						html: 'Just a moment.',
+						showConfirmButton: false,
+						allowEscapeKey: false,
+						allowOutsideClick: false
+					});
+				}
+			})
+
+		}
+
+		
+		// get estimated revenue		
+		function get_estimated_revenue() {
+			
+			return $.ajax({
+				type: 'POST',
+				url: '/api/home/get_estimated_revenue',
+				dataType: 'json',
+				beforeSend: function() {
+					swal({
+						title: load_wave,
+						html: 'Just a moment.',
+						showConfirmButton: false,
+						allowEscapeKey: false,
+						allowOutsideClick: false
+					});
+				}
+			})
+
+		}
+
+		
+		// get stem stem volumes		
+		function get_dispatched_stems() {
+			
+			return $.ajax({
+				type: 'POST',
+				url: '/api/home/get_dispatched_stems',
+				dataType: 'json',
+				beforeSend: function() {
+					swal({
+						title: load_wave,
+						html: 'Just a moment.',
+						showConfirmButton: false,
+						allowEscapeKey: false,
+						allowOutsideClick: false
+					});
+				}
+			})
+
+		}
+
+		
+		// get export/prod		
+		function get_production_export() {
+			
+			return $.ajax({
+				type: 'POST',
+				url: '/api/home/get_production_export',
+				dataType: 'json',
+				beforeSend: function() {
+					swal({
+						title: load_wave,
+						html: 'Just a moment.',
+						showConfirmButton: false,
+						allowEscapeKey: false,
+						allowOutsideClick: false
+					});
+				}
+			})
+
+		}
+
+		
+		// get top sellers		
+		function get_top_sellers() {
+			
+			return $.ajax({
+				type: 'POST',
+				url: '/api/home/get_top_sellers',
+				dataType: 'json',
+				beforeSend: function() {
+					swal({
+						title: load_wave,
+						html: 'Just a moment.',
+						showConfirmButton: false,
+						allowEscapeKey: false,
+						allowOutsideClick: false
+					});
+				}
+			})
+
+		}
+
+		
+		// get top lines		
+		function get_top_lines() {
+			
+			return $.ajax({
+				type: 'POST',
+				url: '/api/home/get_top_lines',
+				dataType: 'json',
+				beforeSend: function() {
+					swal({
+						title: load_wave,
+						html: 'Just a moment.',
+						showConfirmButton: false,
+						allowEscapeKey: false,
+						allowOutsideClick: false
+					});
+				}
+			})
+
+		}
+
+		
+		// get top accounts		
+		function get_top_accounts() {
+			
+			return $.ajax({
+				type: 'POST',
+				url: '/api/home/get_top_accounts',
+				dataType: 'json',
+				beforeSend: function() {
+					swal({
+						title: load_wave,
+						html: 'Just a moment.',
+						showConfirmButton: false,
+						allowEscapeKey: false,
+						allowOutsideClick: false
+					});
+				}
+			})
+
+		}
+
+		
+		// get global footprint		
+		function get_global_footprint() {
+			
+			return $.ajax({
+				type: 'POST',
+				url: '/api/home/get_global_footprint',
+				dataType: 'json',
+				beforeSend: function() {
+					swal({
+						title: load_wave,
+						html: 'Just a moment.',
+						showConfirmButton: false,
+						allowEscapeKey: false,
+						allowOutsideClick: false
+					});
+				}
+			})
+
+		}
+
+				
+		// get dashboard notifications		
+		function get_dashboard_notifications() {
+			
+			return $.ajax({
+				type: 'POST',
+				url: '/api/home/get_dashboard_notifications',
+				dataType: 'json',
+			})
+
+		}
+
+				
+		// get forex rates	
+		function get_forex_rates() {
+			
+			return $.ajax({
+				type: 'POST',
+				url: '/api/home/get_forex_rates',
+				dataType: 'json',
+			})
+
+		}
+
+				
+		// rounding numbers
+		function round(value, precision) {
+			
+			return Number(Math.round(value+'e'+precision)+'e-'+precision);
+		
+		}
+		
+		
+		// set up dashboard
+		$.when(get_new_orders(), 
+			get_confirmed_orders(), 
+			get_dispatched_orders(), 
+			get_estimated_revenue(), 
+			get_dispatched_stems(), 
+			get_production_export(), 
+			get_top_sellers(), 
+			get_top_lines(), 
+			get_top_accounts(), 
+			get_global_footprint(), 
+			get_dashboard_notifications(),
+			get_forex_rates()
+		)
+		
+		.done(function(new_orders, confirmed_orders, dispatched_orders, est_revenue, dispatched_stems, prod_export, top_sellers, top_lines, top_accounts, global_footprint, dash_notifications, rates) {
+			
+			var arrow = '';
+
+			// new orders			
+			if(parseInt(new_orders[0].last_24h) > parseInt(new_orders[0].weekly_average)) {
+				
+				arrow = '<i class="mdi mdi-arrow-up text-success" style="font-size: 90%"></i>';
+			
+			} else {
+			
+				arrow = '<i class="mdi mdi-arrow-down text-danger m-t-5" style="font-size: 90%"></i>';
+			
+			}
+								
+			$('#new_orders_last_day').html($.number(new_orders[0].last_24h) + arrow);
+			$('#new_orders_weekly_avg').html('Weekly Avg: ' + $.number(new_orders[0].weekly_average, 2));
+					
+			// confirmed orders			
+			if(parseInt(confirmed_orders[0].last_24h) > parseInt(confirmed_orders[0].weekly_average)) {
+				
+				arrow = '<i class="mdi mdi-arrow-up text-success" style="font-size: 90%"></i>';
+			
+			} else {
+			
+				arrow = '<i class="mdi mdi-arrow-down text-danger m-t-5" style="font-size: 90%"></i>';
+			
+			}
+            
+            //  TODO remove this line below
+			arrow = '<i class="mdi mdi-arrow-up text-success" style="font-size: 90%"></i>';
+            $('#confirmed_orders_last_day').html(43 + arrow);
+			$('#confirmed_orders_weekly_avg').html('Weekly Avg: ' + 41.14);
+			
+			// $('#confirmed_orders_last_day').html($.number(confirmed_orders[0].last_24h) + arrow);
+			// $('#confirmed_orders_weekly_avg').html('Weekly Avg: ' + $.number(confirmed_orders[0].weekly_average, 2));
+					
+			// dispatched orders			
+			if(parseInt(dispatched_orders[0].last_24h) > parseInt(dispatched_orders[0].weekly_average)) {
+				
+				arrow = '<i class="mdi mdi-arrow-up text-success" style="font-size: 90%"></i>';
+			
+			} else {
+			
+				arrow = '<i class="mdi mdi-arrow-down text-danger m-t-5" style="font-size: 90%"></i>';
+			
+			}
+								
+			$('#dispatched_orders_last_day').html($.number(dispatched_orders[0].last_24h) + arrow);
+			$('#dispatched_orders_weekly_avg').html('Avg of ' + $.number(dispatched_orders[0].weekly_average, 2) + ' orders/day');
+					
+			// estimated revenue			
+			if(parseInt(est_revenue[0].revenue_current) > parseInt(est_revenue[0].revenue_previous)) {
+
+				arrow = '<i class="mdi mdi-arrow-up text-success" style="font-size: 90%"></i>';
+
+			} else {
+
+				arrow = '<i class="mdi mdi-arrow-down text-danger m-t-5" style="font-size: 90%"></i>';
+
+			}
+								
+			$('#estimated_revenue_last_month').html('<i class="mdi mdi-currency-eur" style="font-size: 60%"></i> ' + $.number(Math.round(est_revenue[0].revenue_current)) + arrow);
+			
+			if(est_revenue[0].margin_current > 0) {
+				
+				$('#gross_margin_last_month').html('Gross Margin: <span class="text-success">' + est_revenue[0].margin_current + '%</span>');
+			
+			} else {
+				
+				$('#gross_margin_last_month').html('Gross Margin: <span class="text-danger">' + est_revenue[0].margin_current + '%</span>');
+				
+			}
+
+			// dispatched stems
+			// if(Object.keys(dispatched_stems[0]).length == 0) {
+				
+			// 	$('#chart_total_stems_dispatched').html('<div class="alert alert-warning"><strong>Heads Up!</strong> Not enough data to populate this chart.</div>');
+
+			// } else {
+						
+				var data  = [];
+				var legend = [];
+				
+				var header = '<ul class="list-inline chart-detail-list">';
+				
+				var h = 0; // color scheme
+				for(var j in dispatched_stems[0]) {
+
+					legend.push(j);
+					
+					var color = '';
+					if(h == 0) color = '#f38280';
+					if(h == 1) color = '#52bb56';
+					if(h == 2) color = '#f1b53d';
+
+					header += 
+	                    '<li class="list-inline-item">' +
+	                        '<h5><i class="fa fa-circle m-r-5" style="color:' + color + ';"></i>' + j + '</h5>' +
+	                    '</li>';
+	                
+	                h++;    
+
+				}
+
+				header += '</ul>';
+		        
+		        $('#header_total_stems_dispatched').html(header);    
+																
+				for(var i = 6; i >= 0; i--) {
+
+					var date = moment().tz('Africa/Nairobi').subtract(i, 'days').format('ddd Do');
+					var item = {};
+
+					for(var j in dispatched_stems[0]) {
+
+						item['date'] = date;
+						
+						var stems = dispatched_stems[0][j][moment().tz('Africa/Nairobi').subtract(i, 'days').dayOfYear()];
+
+						if(undefined === stems || isNaN(stems)) item[j] = 0;
+						else item[j] = stems;
+														
+					} 
+					
+					data.push(item);
+
+                }
+                
+                var data2 = [
+                    { y: '2014', a: 50, b: 90},
+                    { y: '2015', a: 65,  b: 75},
+                    { y: '2016', a: 50,  b: 50},
+                    { y: '2017', a: 75,  b: 60},
+                    { y: '2018', a: 80,  b: 65},
+                    { y: '2019', a: 90,  b: 70},
+                    { y: '2020', a: 100, b: 75},
+                    { y: '2021', a: 115, b: 75},
+                    { y: '2022', a: 120, b: 85},
+                    { y: '2023', a: 145, b: 85},
+                    { y: '2024', a: 160, b: 95}
+                    ];
+                
+
+		        Morris.Bar({
+		            element: 'chart_total_stems_dispatched',
+                    data: data2,
+                    xkey: 'y',
+                    ykeys: ['a', 'b'],
+                    labels: ['Total Income', 'Total Outcome'],
+		            hideHover: 'auto',
+		            barSizeRatio: 0.5,
+		            //barGap: 0.1,
+		            resize: true,
+		            gridLineColor: '#eeeeee',
+		            barColors: ['#f38280', '#52bb56', '#f1b53d'],
+		            stacked: true
+		        });
+				
+			// }
+			
+			// production vs export
+			if(Object.keys(prod_export[0]).length == 0) {
+				
+				$('#chart_prod_exports').html('<div class="alert alert-warning"><strong>Heads Up!</strong> Not enough data to populate this chart.</div>');
+
+			} else {
+						
+				var data  = [];
+				var len = Object.keys(prod_export[0]).length - 1;
+
+				for(var i = 6; i >= 0; i--) {
+
+					var date = moment().tz('Africa/Nairobi').subtract(i, 'days').format('ddd Do');
+
+					let prd, exp;
+					
+					if(undefined === prod_export[0][moment().tz('Africa/Nairobi').subtract(i, 'days').dayOfYear()]) {
+						
+						prd = 0;
+						exp = 0;
+						
+					} else {
+						
+						prd = prod_export[0][moment().tz('Africa/Nairobi').subtract(i, 'days').dayOfYear()]['production'];
+						if(prd === undefined) prd = 0;
+						
+						exp = prod_export[0][moment().tz('Africa/Nairobi').subtract(i, 'days').dayOfYear()]['exports'];
+						if(exp === undefined) exp = 0;
+						
+					}
+
+					// assemble
+					data.push({
+						date: date,
+						prd: Math.round(prd),
+						exp: Math.round(exp)
+					})
+
+				}
+
+				var header = 
+	                '<ul class="list-inline chart-detail-list">' +
+	                    '<li class="list-inline-item">' +
+	                        '<h5><i class="fa fa-circle m-r-5" style="color: #f38280;"></i>Production</h5>' +
+	                    '</li>' +
+	                    '<li class="list-inline-item">' +
+	                        '<h5><i class="fa fa-circle m-r-5" style="color: #52bb56;"></i>Exports</h5>' +
+	                    '</li>' +
+	                '</ul>';
+		            
+		        $('#header_prod_exports').html(header);    
+
+		        Morris.Area({
+          		    element: 'chart_prod_exports',
+		            data: data,
+		            xkey: 'date',
+		            ykeys: [ 'prd', 'exp' ],
+		            labels: [ 'Production', 'Exports' ],
+		            hideHover: 'auto',
+		            behaveLikeLine: true,
+		            resize: true,
+		            gridLineColor: '#eeeeee',
+		            lineColors: ['#f38280', '#52bb56'],
+					fillOpacity: ['0.5'],
+					pointFillColors: ['#ffffff'],
+					pointStrokeColors: ['#999999'],
+					parseTime: false // remember to do this!
+		        });
+
+/*
+		        Morris.Line({
+          		    element: 'chart_prod_exports',
+		            data: data,
+		            xkey: 'date',
+		            ykeys: [ 'prd', 'exp' ],
+		            labels: [ 'Production', 'Exports' ],
+		            hideHover: 'auto',
+		            behaveLikeLine: true,
+		            resize: true,
+		            gridLineColor: '#eeeeee',
+		            lineColors: ['#f38280', '#52bb56'],
+					fillOpacity: ['0.1'],
+					pointFillColors: ['#ffffff'],
+					pointStrokeColors: ['#999999'],
+					parseTime: false // remember to do this!
+		        });
+*/
+
+			}
+			
+			// top sellers
+			if(Object.keys(top_sellers[0]).length == 0) {
+				
+				$('#tbl_top_sellers').parent().html('<div class="alert alert-warning"><strong>Heads Up!</strong> Not enough data to populate this chart.</div>');	
+						
+			} else {
+				
+				var rows = '';
+			
+				for(var i in top_sellers[0]) {
+					
+					rows += 
+						'<tr>' +
+							'<td>' +
+								'<h5 class="m-0">' + i + '</h5>' +
+							'</td>' +
+							'<td class="text-center">' + $.number(top_sellers[0][i]) + ' stems</td>' +
+						'</tr>';
+					
+				}
+
+				// write
+				$('#tbl_top_sellers tbody').empty().append(rows);	
+
+			}
+			
+			// top lines
+			if(Object.keys(top_lines[0]).length == 0) {
+				
+				$('#tbl_top_lines').parent().html('<div class="alert alert-warning"><strong>Heads Up!</strong> Not enough data to populate this chart.</div>');	
+						
+			} else {
+				
+				var rows = '';
+			
+				for(var i in top_lines[0]) {
+					
+					rows += 
+						'<tr>' +
+							'<td>' +
+								'<h5 class="m-0">' + i + '</h5>' +
+							'</td>' +
+							'<td class="text-center revenue" data-currency="eur" data-revenue="' + round(top_lines[0][i], 2) + '"><i class="fa fa-eur"></i> ' + $.number(top_lines[0][i], 2) + '</td>' +
+						'</tr>';
+					
+				}
+
+				// write
+				$('#tbl_top_lines tbody').empty().append(rows);	
+
+			}
+			
+			// top accounts
+			if(Object.keys(top_accounts[0]).length == 0) {
+				
+				$('#tbl_top_accounts').parent().html('<div class="alert alert-warning"><strong>Heads Up!</strong> Not enough data to populate this chart.</div>');	
+						
+			} else {
+				
+				var rows = '';
+			
+				for(var i in top_accounts[0]) {
+					
+					rows += 
+						'<tr>' +
+							'<td>' +
+								'<h5 class="m-0">' + i + '</h5>' +
+							'</td>' +
+							'<td class="text-center revenue" data-currency="eur" data-revenue="' + round(top_accounts[0][i], 2) + '"><i class="fa fa-eur"></i> ' + $.number(top_accounts[0][i], 2) + '</td>' +
+						'</tr>';
+					
+				}
+
+				// write
+				$('#tbl_top_accounts tbody').empty().append(rows);	
+
+			}
+			
+			// global footprint
+			$('#mapcontainer').mapael({
+			    map : {
+			        name : "world_countries",
+                    zoom: {
+                        enabled: true,
+                        mousewheel: false,
+                        animDuration: 250,
+                        animEasing: "backIn"
+                    },
+                    defaultArea: {
+		                attrs: {
+		                    fill: "#36404e",
+		                    stroke: "#aaa"
+		                },
+                        attrsHover: {
+                            fill: "#343434",
+                            stroke: "#5d5d5d",
+                            "stroke-width": 1,
+                            "stroke-linejoin": "round"
+                        }
+                    }					
+                },
+	            legend: {
+	                plot: {
+	                    mode: "horizontal",
+	                    title: "Stem Volumes by City",
+	                    titleAttrs: {
+		                    "font-size": 14,
+		                    "font-family": "Avenir"
+	                    },
+	                    labelAttrs: {
+	                        "font-size": 12,
+	                        "font-family": "Avenir"
+	                    },
+	                    marginLeft: 5,
+	                    marginLeftLabel: 5,
+	                    slices: [
+	                        {
+	                            min: 0,
+	                            max: 499,
+	                            attrs: {
+	                                fill: "#e9e100"
+	                            },
+	                            attrsHover: {
+	                                transform: "s1.5",
+	                                "stroke-width": 1
+	                            },
+	                            label: "< 500",
+	                            size: 10
+	                        },
+	                        {
+	                            min: 500,
+	                            max: 1000,
+	                            attrs: {
+	                                fill: "#f99200"
+	                            },
+	                            attrsHover: {
+	                                transform: "s1.5",
+	                                "stroke-width": 1
+	                            },
+	                            label: "500 - 1000",
+	                            size: 20
+	                        },
+	                        {
+	                            min: 1000,
+	                            attrs: {
+	                                fill: "#ff5454"
+	                            },
+	                            attrsHover: {
+	                                transform: "s1.5",
+	                                "stroke-width": 1
+	                            },
+	                            label: "> 1,000",
+	                            size: 30
+	                        }
+	                    ]
+	                }
+		        },
+	            plots: { }
+	            
+	        });
+
+			// get coordinates of each city
+			var content = '{ ',
+				m = 0; // counter	
+
+			for(var k in global_footprint[0]) {
+
+				// volume must be positive
+				if(global_footprint[0][k].volume > 0 && v.includes(global_footprint[0][k].geo, ',')) {
+
+					if(m > 0) content += ', ';
+					
+					var geo = v.split(global_footprint[0][k].geo, ',');
+					
+					content +=
+	                	'"' + global_footprint[0][k].city + '": {' +
+		                    '"latitude": ' + geo[0] + ',' +
+		                    '"longitude": ' + geo[1] + ',' +
+		                    '"value": ' + global_footprint[0][k].volume + ',' +
+		                    '"tooltip": { ' +
+		                    	'"content" : "' + global_footprint[0][k].city + ', ' + global_footprint[0][k].country + '<br/>' +
+		                    	'Volumes: ' + $.number(global_footprint[0][k].volume) + '<br/>' +
+		                    	'Revenue: <i class=\'fa fa-eur\'></i> ' + $.number(global_footprint[0][k].revenue, 2) + '"' +
+		                    '}' +
+		                '}';
+		             
+		             m++;
+		                
+		        }
+		        
+		    }
+		    
+		    content += ' }';
+		            	    
+			// update map
+			$('#mapcontainer').trigger('update', [{ 
+				newPlots: JSON.parse(content)
+			}]);
+	
+			// dashboard notifications
+			if(dash_notifications[0].length == 0) {
+				
+				$('#notifications_container').html('<div class="alert alert-warning"><strong>Heads Up!</strong> Not enough data to populate this chart.</div>');
+				
+			} else {
+				
+				var content = '';
+				
+				for(var i in dash_notifications[0]) {
+
+					content +=
+	                    '<a class="notify_list">' +
+	                        '<div class="inbox-item">' +
+								'<div class="inbox-item-img"><img src="<?php echo base_url(); ?>' + 'uploads/mugshots/' + dash_notifications[0][i].mugshot + '" class="img-circle" alt=""></div>' +
+	                            '<p class="inbox-item-author m-t-5">' + dash_notifications[0][i].title + '</p>' +
+	                            '<p class="inbox-item-text">' + dash_notifications[0][i].message + '</p>' +
+	                            '<p class="inbox-item-date">' + moment.unix(dash_notifications[0][i].create_date).fromNow() + '</p>' +
+	                        '</div>' +
+	                    '</a>';
+									
+				}
+			
+				$('#notifications_container').html(content);
+				
+			}
+			
+			// forex
+			sessionStorage.setItem('rates', JSON.stringify(rates[0]));
+			
+			// done
+			setTimeout(() => swal.close(), 500);				
+
+		})	
+		
+		.fail(function(e) {	
+
+		  	swal({
+			  	title: 'Whoa!..',
+			  	text: 'Something broke while initializing the dashboard.',
+			  	type: 'error',
+				confirmButtonText: "Get Help",
+				showCancelButton: true,
+				cancelButtonText: "Close"
+			}).then(function() {
+				$('#help_trigger').get(0).click();
+			},function(dismiss) {
+				//close 
+			});						
+		})
+
+
+		// *** HELPERS ***
+		
+		// update dashboard notificationss
+		setInterval(() => get_dashboard_notifications(), 30000); 
+
+
+		// currency conversions
+		$('select.convert_currency').on('changed.bs.select', function(e) {
+
+			var std_currency = $(e.target).find('option:selected').val();
+			var table = $(e.target).closest('div.card-box').find('.table');
+			var rates = JSON.parse(sessionStorage.getItem('rates'));
+
+			table.find('tbody tr td.revenue').each(function() {
+				
+				var td = $(this);
+				
+				var this_currency = td.attr('data-currency');
+			
+				if(this_currency == std_currency) {
+					
+					var this_revenue = $.number(td.attr('data-revenue'), 2);
+
+					td.html('<i class="fa fa-' + std_currency + '"></i> ' + this_revenue);
+
+				} else {
+					
+					var rate = rates[this_currency + '_' + std_currency];
+					var this_revenue = $.number(td.attr('data-revenue') * rate, 2);
+					
+					if(std_currency == 'kes') {
+						
+						td.html('KES ' + this_revenue);
+						
+					} else {
+						
+						td.html('<i class="fa fa-' + std_currency + '"></i> ' + this_revenue);
+					
+					}
+					
+				}	
+				
+			})	
+					
+		});
+		
+		
+	});
+	
+</script>
                                     </div>
                                 </div>
                             </div>
